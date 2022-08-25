@@ -15,7 +15,7 @@
     "start": "run-s build start:server",
     "lint": "eslint ."
   },
-  "author": "Vimeo",
+  "author": "Hightouch",
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.8",
     "@types/oauth": "^0.9.1",

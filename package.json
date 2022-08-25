@@ -11,7 +11,7 @@
     "start:api": "npm --prefix app/api start",
     "start:ui": "npm --prefix app/ui start",
     "build:ui": "npm --prefix app/ui run build",
-    "start": "run-p build:ui start:api",
+    "start": "run-p build:ui start:api start:ui",
     "lint:ui": "npm --prefix app/ui run lint",
     "lint:api": "npm --prefix app/api run lint",
     "lint": "run-s lint:ui lint:api"

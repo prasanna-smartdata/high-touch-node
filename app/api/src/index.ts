@@ -30,22 +30,13 @@ import   routes from './routes'
 // These are commented out because the code that uses
 // these imports are also commented out below and only
 // exist to demonstrate how to structure the app.
-//
-// import vimeoApiRouter from "./vimeoApi";
-// import { VimeoAccessTokenResponse } from "vimeo";
 
+ 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Make sure we initialize the app config from the env vars
 // as early as possible.
 const appConfig = getAppConfig();
-//const sfmcOAuthCallbackPath = "/oauth2/sfmc/callback";
-
-// The API path where the customer's OAuth service should
-// redirect the user to with the authorization code.
-// const vimeoOAuthCallbackPath = "/oauth2/vimeo/callback";
-
-//const defaultAxiosClient = axios.create();
-// const hightouchBaseURL = axios.create({baseUrl: "https://api.hightouch.io/api/v1"});
+ 
 const app = express();
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -66,8 +57,7 @@ app.use(
     bodyParser.json({
         type: [
             "application/json",
-            "application/vnd.vimeo.video",
-            "application/vnd.vimeo.video+json",
+           
         ],
     })
 );
@@ -83,7 +73,6 @@ app.use(
                 connectSrc: [
                     "'self'",
                     "https://*.marketingcloudapis.com/",
-                    "https://api.vimeo.com/",
                 ],
             },
         },
