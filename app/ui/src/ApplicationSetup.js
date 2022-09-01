@@ -119,7 +119,7 @@ export default function AppDetails() {
                         <Button id="btnCancel">Cancel</Button>
                         <Button id="button">
                             <Link
-                                to="/Config"
+                                to="/ConfigHightouch"
                                 state={{
                                     client: client,
                                     secret: secret,

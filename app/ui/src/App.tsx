@@ -5,7 +5,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 // import { refreshSfmcToken } from "./sfmcClient";
 import AppDetails from "./ApplicationSetup";
-import Config from "./Config";
+import ConfigHightouch from "./ConfigHightouch";
 import Review from "./ReviewSetup";
 import { Header } from "./views/Header";
 
@@ -19,17 +19,18 @@ function App() {
             
             <div className="navigation" >
                 <div className="navigation-sub">
-                <Link to ='/ApplicationSetup'></Link>&nbsp;
-                <Link to='/Config'></Link>&nbsp;
+                <Link to ='/CheckApplicationDetails'></Link>&nbsp;
+                <Link to='/ConfigHightouch'></Link>&nbsp;
                 <Link to='/ReviewSetup'></Link>
                 </div>
             </div>
             <Container>
             <div className="content">
                 <Routes>
+                <Route path='/' element={<AppDetails />}/>
               
-                <Route path='/ApplicationSetup' element={<AppDetails />}/>
-                <Route path='/Config' element = {<Config />}/>
+                <Route path='/CheckApplicationDetails' element={<AppDetails />}/>
+                <Route path='/ConfigHightouch' element = {<ConfigHightouch />}/>
                 <Route path='/ReviewSetup' element = {<Review />}/>
                 </Routes>               
             </div>

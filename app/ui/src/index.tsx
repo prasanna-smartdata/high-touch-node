@@ -32,9 +32,9 @@ root.render(
     >
         <React.StrictMode>
             <BrowserRouter>
-                <div>
+                {/* <div>
                     <Header></Header>
-                </div>
+                </div> */}
                 <Routes>
                     <Route path="*" element={<App />}></Route>
                 </Routes>

@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-export default function Config() {
+export default function ConfigHightouch() {
     const loc = useLocation();
     const client = loc.state.client;
     const secret = loc.state.secret;
@@ -45,7 +45,7 @@ export default function Config() {
                     <form>
                         <Button id="btnCancel">
                             <Link
-                                to="/ApplicationSetup"
+                                to="/CheckApplicationDetails"
                                 state={{
                                     client: client,
                                     secret: secret,

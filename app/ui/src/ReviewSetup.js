@@ -79,7 +79,7 @@ export default function Review() {
                     <form>
                         <Button id="btnCancel">
                             <Link
-                                to="/Config"
+                                to="/ConfigHightouch"
                                 state={{
                                     client: client,
                                     secret: secret,
