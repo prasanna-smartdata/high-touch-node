@@ -4,10 +4,9 @@ import {Route, Link,Routes } from "react-router-dom";
 import React from "react";
 import { Container } from "react-bootstrap";
 // import { refreshSfmcToken } from "./sfmcClient";
-import AppDetails from "./ApplicationSetup";
-import ConfigHightouch from "./ConfigHightouch";
-import Review from "./ReviewSetup";
-import { Header } from "./views/Header";
+import AppDetails from "./views/ApplicationSetup";
+import ConfigHightouch from "./views/ConfigHightouch";
+import Review from "./views/ReviewSetup";
 
 function App() {
     // useEffect(() => {

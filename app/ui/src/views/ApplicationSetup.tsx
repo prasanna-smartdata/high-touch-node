@@ -12,21 +12,21 @@ export default function AppDetails() {
     const [client, setclientid] = useState("");
     const [secret, setsecret] = useState("");
     const [jwt, setjwt] = useState("");
-    const getcid = (e) => {
+    const getcid = (e: any) => {
         setclientid(e.target.value);
     };
-    const getsecret = (e) => {
+    const getsecret = (e: any) => {
         setsecret(e.target.value);
     };
-    const getjwt = (e) => {
+    const getjwt = (e: any) => {
         setjwt(e.target.value);
     };
     console.log("CId::", client, "Secret::", secret, "jwt::", jwt);
 
     function showFooter() {
         console.log("Function Called");
-        document.getElementById("form1card").style = { "padding-bottom": "0%" };
-        document.getElementById("foot").style.display = "block";
+        document.getElementById("form1card")?.setAttribute("style", "padding-bottom: 0%");
+        const foot = document.getElementById("foot")?.setAttribute("style", "display :block");
     }
 
     return (
@@ -34,19 +34,19 @@ export default function AppDetails() {
             <div className="row marginZero">
                 <div
                     className="col-sm-4 Div1 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">S2S Application Setup</span>
                 </div>
                 <div
                     className="col-sm-4 Div2 txtlabel txtIncompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">Configure HighTouch</span>
                 </div>
                 <div
                     className="col-sm-4 Div3 txtlabel txtIncompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">Review Setup</span>
                 </div>
@@ -57,7 +57,7 @@ export default function AppDetails() {
             <div
                 id="form1card"
                 className="cardsec form1"
-                style={{ "padding-bottom": "7%" }}
+                style={{ paddingTop: "7%" }}
             >
                 <Card.Title>Server 2 Server Application Details</Card.Title>
                 <form>
@@ -103,7 +103,7 @@ export default function AppDetails() {
                         Verify My Account
                     </Button>
                 </form>
-                <div id="foot" style={{ "padding-bottom": "0%" }}>
+                <div id="foot" style={{ paddingTop: "0%" }}>
                     <div className="line"></div>
                     <br></br>
                     <Card className="cardBody">

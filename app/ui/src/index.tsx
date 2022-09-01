@@ -12,7 +12,6 @@ import "./index.css";
 
 import App from "./App";
 import React from "react";
-import { Header } from "./views/Header";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
