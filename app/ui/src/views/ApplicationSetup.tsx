@@ -1,35 +1,28 @@
 import React, { useState } from "react";
-// import {useNavigate} from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+//import Button from "react-bootstrap/Button";
+import { Button, Card, Icon } from '@salesforce/design-system-react';
 import { Link } from "react-router-dom";
 // require("dotenv").config();
 
 export default function AppDetails() {
-    // const cid = process.env.SFMC_CLIENT_ID;
-    // console.log('CID::',cid)
-    // const navigate = useNavigate();
+
     const [client, setclientid] = useState("");
     const [secret, setsecret] = useState("");
-    const [jwt, setjwt] = useState("");
     const getcid = (e: any) => {
         setclientid(e.target.value);
     };
     const getsecret = (e: any) => {
         setsecret(e.target.value);
     };
-    const getjwt = (e: any) => {
-        setjwt(e.target.value);
-    };
-    console.log("CId::", client, "Secret::", secret, "jwt::", jwt);
 
-    
+
+
     function showFooter() {
-        console.log("Function Called");
         document.getElementById("form1card")?.setAttribute("style", "padding-bottom: 0%");
         const foot = document.getElementById("foot")?.setAttribute("style", "display :block");
     }
 
+    const isEmpty=1;
     return (
         <div>
             <div className="row marginZero">
@@ -60,7 +53,8 @@ export default function AppDetails() {
                 className="cardsec form1"
                 style={{ paddingTop: "7%" }}
             >
-                <Card.Title>Server 2 Server Application Details</Card.Title>
+                <Card heading="Server 2 Server Application Details" 
+                	icon={<Icon category="standard" name="document" size="small" />}></Card>
                 <form>
                     <label>
                         Client ID <br></br>
@@ -82,30 +76,31 @@ export default function AppDetails() {
                             placeholder="  Client Secret"
                         />{" "}
                         <br></br>
-                       
+
                     </label>
                     &nbsp;
                     <Button
-                        variant="primary"
+                        variant="brand"
                         name="verify"
+                        label="Verify My Account"
                         onClick={showFooter}
                         className="button1"
                     >
-                        Verify My Account
+
                     </Button>
                 </form>
                 <div id="foot" style={{ paddingTop: "0%" }}>
                     <div className="line"></div>
                     <br></br>
-                    <Card className="cardBody">
-                        SFMC App Credentials Verified
+                    <Card     heading="SFMC App Credentials Verified"   className="cardBody">
+
                     </Card>
                 </div>
             </div>
             <br></br>
 
             <div>
-                <Card className="cardfooter">
+                <Card heading=''    className="cardfooter">
                     <form>
                         {/* <Button id="btnCancel">Cancel</Button> */}
                         <Button id="button">
@@ -114,16 +109,11 @@ export default function AppDetails() {
                                 state={{
                                     client: client,
                                     secret: secret,
-                                    jwt: jwt,
                                 }}
                             >
                                 Next
                             </Link>
                         </Button>
-                        {/* <Button id="btnNext" ><Link to="/Config">Next</Link></Button> */}
-                        {/* <a id='button' href="/Config" >Next</a>  */}
-                        {/* <button onClick={config()}>Next</button> onClick={()=>{config()}}  */}
-                        {/* <button type="button" id="button" onClick={config()}>Next </button> */}
                     </form>
                 </Card>
             </div>
