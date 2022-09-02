@@ -90,6 +90,40 @@ async function verifyOAuth2Callback(
 
     return code;
 }
+
+export const verifYServer2ServerOAuth=async (req: Request, res: Response ) => {
+    const tssd = req.query.tssd || appConfig.sfmcDefaultTenantSubdomain;
+   
+      await sfmcClient.post<AccessTokenResponse>(
+        `https://${tssd}.auth.marketingcloudapis.com/v2/token`,
+        {
+            grant_type: "client_credentials",
+            scope: "email_read email_write email_send",
+            account_id: "abc123678901",
+            client_id: "",
+            client_secret:  "",
+        }
+    ).then((resp:any)=>{
+        const accessTokenResp = resp.data;
+        res.cookie(
+            "sfmc_access_token",
+            accessTokenResp.access_token,
+            getCookieOptions(TWENTY_MINS_IN_SECONDS)
+        );
+        res.cookie(
+            "sfmc_refresh_token",
+            accessTokenResp.refresh_token,
+            getCookieOptions(ONE_HOUR_IN_SECONDS)
+        );
+    
+        res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
+    
+        return res;
+    })
+    .catch((err)=>{
+        return err
+    });
+}
 export const oAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
     const code = await verifyOAuth2Callback(req, next);
     const tssd = req.query.tssd || appConfig.sfmcDefaultTenantSubdomain;

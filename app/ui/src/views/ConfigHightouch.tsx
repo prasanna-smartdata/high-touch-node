@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 export default function ConfigHightouch() {
-    const loc:any = useLocation();
+    const loc: any = useLocation();
     const client = loc.state.client;
     const secret = loc.state.secret;
     const jwt = loc.state.jwt;
@@ -14,19 +14,19 @@ export default function ConfigHightouch() {
             <div className="row marginZero">
                 <div
                     className="col-sm-4 Div1 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">S2S Application Setup</span>
                 </div>
                 <div
                     className="col-sm-4 Div2 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">Configure HighTouch</span>
                 </div>
                 <div
                     className="col-sm-4 Div3 txtlabel txtIncompleted clsUnlink"
-                    // onClick={onchangeHandler}
+                // onClick={onchangeHandler}
                 >
                     <span className="wrdtext">Review Setup</span>
                 </div>
@@ -37,13 +37,25 @@ export default function ConfigHightouch() {
             <div className="cardsec form2">
                 <Card id="cnfg">Connect My Experience</Card>
                 <Button id="ht">ht</Button>
+                <br></br>
+                <br></br>
+                API Key <br></br>
+                <input
+                    type="text"
+                    id="key"
+                    style={{ width: "400px" }}
+                    className="textBox"
+                    placeholder="API Key"
+                />{" "}
+               
             </div>
+
             <br></br>
 
             <div>
                 <Card className="cardfooter">
                     <form>
-                        <Button id="btnCancel">
+                        <Button id="button">
                             <Link
                                 to="/CheckApplicationDetails"
                                 state={{
@@ -52,9 +64,10 @@ export default function ConfigHightouch() {
                                     jwt: jwt,
                                 }}
                             >
-                                Cancel
+                                Back
                             </Link>
                         </Button>
+                        &nbsp; &nbsp;
                         <Button id="button">
                             <Link
                                 to="/ReviewSetup"

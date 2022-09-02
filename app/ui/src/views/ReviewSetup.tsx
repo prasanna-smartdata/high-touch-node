@@ -77,7 +77,7 @@ export default function Review() {
             <div>
                 <Card className="cardfooter">
                     <form>
-                        <Button id="btnCancel">
+                        <Button id="button">
                             <Link
                                 to="/ConfigHightouch"
                                 state={{
@@ -86,11 +86,13 @@ export default function Review() {
                                     jwt: jwt,
                                 }}
                             >
-                                Cancel
+                                Back
                             </Link>
+                           
                         </Button>
+                        &nbsp; &nbsp;
                         <Button id="button">
-                            <Link to="/">Done</Link>
+                            <Link to="/">Create</Link>
                         </Button>
                     </form>
                 </Card>

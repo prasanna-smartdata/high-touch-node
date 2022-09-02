@@ -23,6 +23,7 @@ export default function AppDetails() {
     };
     console.log("CId::", client, "Secret::", secret, "jwt::", jwt);
 
+    
     function showFooter() {
         console.log("Function Called");
         document.getElementById("form1card")?.setAttribute("style", "padding-bottom: 0%");
@@ -81,17 +82,7 @@ export default function AppDetails() {
                             placeholder="  Client Secret"
                         />{" "}
                         <br></br>
-                        <br></br>
-                        JWT Token <br></br>
-                        <input
-                            type="text"
-                            id="jwt"
-                            onChange={getjwt}
-                            style={{ width: "400px" }}
-                            className="textBox"
-                            placeholder="  JWT"
-                        />{" "}
-                        <br></br>
+                       
                     </label>
                     &nbsp;
                     <Button
@@ -116,7 +107,7 @@ export default function AppDetails() {
             <div>
                 <Card className="cardfooter">
                     <form>
-                        <Button id="btnCancel">Cancel</Button>
+                        {/* <Button id="btnCancel">Cancel</Button> */}
                         <Button id="button">
                             <Link
                                 to="/ConfigHightouch"
