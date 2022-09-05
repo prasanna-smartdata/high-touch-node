@@ -1,13 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import Button from "react-bootstrap/Button";
-import { Button, Card, Icon } from '@salesforce/design-system-react';
-import { Link } from "react-router-dom";
+import { BrandBand, Button, Card, Icon, Input, InputIcon } from
+    '@salesforce/design-system-react';
+import { Link, useLocation } from "react-router-dom";
+import { AuthRequestBody, verifYServer2ServerOAuth } from "../actions/ApiActions";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { withNavigation } from "../components/withNavigation";
 // require("dotenv").config();
 
-export default function AppDetails() {
+function AppDetails(prop: any) {
 
+    console.log(prop)
+    function getCookie(name: string) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
     const [client, setclientid] = useState("");
     const [secret, setsecret] = useState("");
+
+    const [cookies, setCookie] = useCookies(['XSRF-Token'])
+
     const getcid = (e: any) => {
         setclientid(e.target.value);
     };
@@ -15,6 +41,16 @@ export default function AppDetails() {
         setsecret(e.target.value);
     };
 
+   
+    const verifyAccount = () => {
+
+        const request: AuthRequestBody = {
+            clientId: client,
+            secretKey: secret
+        }
+        // const csrf = cookie.load('csrf-token');
+        // verifYServer2ServerOAuth(request, csrf);
+    }
 
 
     function showFooter() {
@@ -22,101 +58,114 @@ export default function AppDetails() {
         const foot = document.getElementById("foot")?.setAttribute("style", "display :block");
     }
 
-    const isEmpty=1;
+    const isEmpty = 1;
     return (
         <div>
-            <div className="row marginZero">
-                <div
-                    className="col-sm-4 Div1 txtlabel txtCompleted clsUnlink"
-                // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">S2S Application Setup</span>
-                </div>
-                <div
-                    className="col-sm-4 Div2 txtlabel txtIncompleted clsUnlink"
-                // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">Configure HighTouch</span>
-                </div>
-                <div
-                    className="col-sm-4 Div3 txtlabel txtIncompleted clsUnlink"
-                // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">Review Setup</span>
-                </div>
-                <div>
-                    <h2 className="h2txt">hightouch</h2>
-                </div>
-            </div>
-            <div
-                id="form1card"
-                className="cardsec form1"
-                style={{ paddingTop: "7%" }}
-            >
-                <Card heading="Server 2 Server Application Details" 
-                	icon={<Icon category="standard" name="document" size="small" />}></Card>
-                <form>
-                    <label>
-                        Client ID <br></br>
-                        <input
-                            type="text"
-                            id="clientid"
-                            onChange={getcid}
-                            className="textBox"
-                            placeholder="  Client ID"
-                        />
-                        <br></br>
-                        <br></br>
-                        Client Secret <br></br>
-                        <input
-                            type="text"
-                            id="secret"
-                            onChange={getsecret}
-                            className="textBox"
-                            placeholder="  Client Secret"
-                        />{" "}
-                        <br></br>
 
-                    </label>
-                    &nbsp;
-                    <Button
-                        variant="brand"
-                        name="verify"
-                        label="Verify My Account"
-                        onClick={showFooter}
-                        className="button1"
+            <div style={{ paddingTop: "5%" }}>
+                <BrandBand
+                    id="brand-band-no-image"
+
+                    theme="lightning-blue">
+                    <div
+                        id="form1card"
+
                     >
+                        
+                        <div className="slds-box slds-theme_default">
+                            <h3 className="slds-text-heading_label slds-truncate">Server 2 Server Application Details</h3>
+                        </div>
 
-                    </Button>
-                </form>
-                <div id="foot" style={{ paddingTop: "0%" }}>
-                    <div className="line"></div>
+                        <form>
+                            <div className="slds-col slds-size_1-of-4 slds-grid_pull-padded">
+                                <div className="slds-col_padded">
+                                    <Input
+                                        iconRight={
+                                            <InputIcon
+                                                assistiveText={{
+                                                    icon: 'Clear',
+                                                }}
+                                                name="clear"
+                                                category="utility"
+
+                                            />
+                                        }
+                                        id="unique-id-3"
+                                        label="Client ID"
+                                        placeholder="Enter Client ID "
+                                    />
+                                </div>
+                                <br />
+                                <div className="slds-col_padded slds-m-left_none">
+                                    <Input
+                                        iconRight={
+                                            <InputIcon
+                                                assistiveText={{
+                                                    icon: 'Clear',
+                                                }}
+                                                name="clear"
+                                                category="utility"
+
+                                            />
+                                        }
+                                        id="unique-id-4"
+                                        label="Client Secret"
+                                        placeholder="Enter Secret"
+                                    />
+                                </div>
+                                &nbsp;
+                                <div>
+                                    <Button
+                                        variant="brand"
+                                        name="verify"
+                                        label="Verify My Account"
+                                        onClick={verifyAccount}
+                                        className="button1"
+                                    > </Button>
+                                </div>
+
+
+
+                                <div id="foot" style={{ paddingTop: "0%" }}>
+                                    <div className="line"></div>
+                                    <br></br>
+                                    <Card heading="SFMC App Credentials Verified" className="cardBody">
+
+                                    </Card>
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                {/* <Button id="btnCancel">Cancel</Button> */}
+                                <Button id="button">
+                                    <Link
+                                        onClick={()=>prop.updateState(false, true, false,true,false,false)}
+                                        to="/ConfigHightouch"
+                                        state={{
+                                            client: client,
+                                            secret: secret,
+                                        }}
+                                    >
+                                        Next
+                                    </Link>
+                                </Button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
                     <br></br>
-                    <Card     heading="SFMC App Credentials Verified"   className="cardBody">
 
-                    </Card>
-                </div>
-            </div>
-            <br></br>
 
-            <div>
-                <Card heading=''    className="cardfooter">
-                    <form>
-                        {/* <Button id="btnCancel">Cancel</Button> */}
-                        <Button id="button">
-                            <Link
-                                to="/ConfigHightouch"
-                                state={{
-                                    client: client,
-                                    secret: secret,
-                                }}
-                            >
-                                Next
-                            </Link>
-                        </Button>
-                    </form>
-                </Card>
+                </BrandBand>
             </div>
+
+
         </div>
     );
 }
+export default withNavigation(AppDetails);

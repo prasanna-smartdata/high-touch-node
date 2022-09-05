@@ -3,37 +3,16 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { withNavigation } from "../components/withNavigation";
 
-export default function Review() {
-    const loc:any = useLocation();
+function Review(prop: any) {
+    const loc: any = useLocation();
     const client = loc.state.client;
     const secret = loc.state.secret;
     const jwt = loc.state.jwt;
     return (
         <div>
-            <div className="row marginZero">
-                <div
-                    className="col-sm-4 Div1 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">S2S Application Setup</span>
-                </div>
-                <div
-                    className="col-sm-4 Div2 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">Configure HighTouch</span>
-                </div>
-                <div
-                    className="col-sm-4 Div3 txtlabel txtCompleted clsUnlink"
-                    // onClick={onchangeHandler}
-                >
-                    <span className="wrdtext">Review Setup</span>
-                </div>
-                <div>
-                    <h2 className="h2txt">hightouch</h2>
-                </div>
-            </div>
+
             <div className="cardsec form3">
                 <Card.Title></Card.Title>
                 <form>
@@ -80,6 +59,7 @@ export default function Review() {
                         <Button id="button">
                             <Link
                                 to="/ConfigHightouch"
+                                onClick={() => prop.updateState(false, true, false, true, false, false)}
                                 state={{
                                     client: client,
                                     secret: secret,
@@ -88,7 +68,7 @@ export default function Review() {
                             >
                                 Back
                             </Link>
-                           
+
                         </Button>
                         &nbsp; &nbsp;
                         <Button id="button">
@@ -100,3 +80,4 @@ export default function Review() {
         </div>
     );
 }
+export default withNavigation(Review);

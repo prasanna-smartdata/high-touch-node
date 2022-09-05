@@ -12,6 +12,7 @@ import "./index.css";
 
 import App from "./App";
 import React from "react";
+import { CookiesProvider } from "react-cookie";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -31,12 +32,14 @@ root.render(
     >
         <React.StrictMode>
             <BrowserRouter>
-                {/* <div>
+                <CookiesProvider>
+                    {/* <div>
                     <Header></Header>
                 </div> */}
-                <Routes>
-                    <Route path="*" element={<App />}></Route>
-                </Routes>
+                    <Routes>
+                        <Route path="*" element={<App />}></Route>
+                    </Routes>
+                </CookiesProvider>
             </BrowserRouter>
         </React.StrictMode>
     </IconSettings>

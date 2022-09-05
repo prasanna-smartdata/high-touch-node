@@ -3,9 +3,9 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
-import express, {  Request, Response } from "express";
+import express, { Request, Response } from "express";
 
- 
+
 // import jwt from "jsonwebtoken";
 
 // Middleware
@@ -22,21 +22,22 @@ import { getAppConfig, getAppPort, isDev } from "./config";
 import {
     getCookieOptions,
     //ONE_HOUR_IN_SECONDS,
-   // TWENTY_MINS_IN_SECONDS,
+    // TWENTY_MINS_IN_SECONDS,
 } from "./cookies";
 import { clientErrorHandler, errorHandler } from "./errors";
-import   routes from './routes'
+import routes from "./routes";
+//import routes from './routes'
 //import { healthCheck } from './controller'
 // These are commented out because the code that uses
 // these imports are also commented out below and only
 // exist to demonstrate how to structure the app.
 
- 
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Make sure we initialize the app config from the env vars
 // as early as possible.
 const appConfig = getAppConfig();
- 
+
 const app = express();
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -57,7 +58,7 @@ app.use(
     bodyParser.json({
         type: [
             "application/json",
-           
+
         ],
     })
 );
@@ -99,22 +100,40 @@ app.use("/assets", express.static(join(__dirname, "dist/ui")));
 app.use(clientErrorHandler);
 app.use(errorHandler);
 
+app.use(function (_req, res, next) {
+    res.header('Content-Type', 'application/json;charset=UTF-8')
+    res.header('Access-Control-Allow-Credentials', "true")
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    )
+    next()
+})
+routes(app)
+// var csrfProtection = csurf({ cookie: true });
+// var parseForm = bodyParser.urlencoded({ extended: false });
 
-routes(app) 
+// app.post('/api/healthcheckpost', parseForm,
+//       csrfProtection, function (_req, res) {
+//   res.send('Successfully Validated!!');
+// });
+
 app.get("/*", (req: Request, res: Response) => {
+    console.log("  Token ::", "token");
+
     let token = req.csrfToken();
     console.log("XCRF Token ::", token);
     res.cookie("XSRF-Token", req.csrfToken(), getCookieOptions());
+    res.cookie(`Cookie token name`, `encrypted cookie string Value`);
+    res.send('Cookie have been saved successfully');
+    // if (isDev() && appConfig.redirectUiToLocalhost) {
+    //     console.log("Redirecting to localhost...");
+    //     res.redirect("https://app.localhost:3000");
+    //     return;
+    // }
 
-    if (isDev() && appConfig.redirectUiToLocalhost) {
-        console.log("Redirecting to localhost...");
-        res.redirect("https://app.localhost:3000");
-        return;
-    }
-
-    res.sendFile(join(__dirname, "ui", "index.html"));
+    // res.sendFile(join(__dirname, "ui", "index.html"));
 });
-
 
 const port = getAppPort();
 if (isDev()) {
