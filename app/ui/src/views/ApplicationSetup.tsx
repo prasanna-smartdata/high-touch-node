@@ -91,22 +91,7 @@ function AppDetails(prop: any) {
                                         placeholder="Enter Client ID "
                                         />
                                     </div>
-                                    {/* <Input
-                                        iconRight={
-                                            <InputIcon
-                                                assistiveText={{
-                                                    icon: 'Clear',
-                                                }}
-                                                name="clear"
-                                                category="utility"
-
-                                            />
-                                        }
-                                        onChange={getcid}
-                                        id="unique-id-3"
-                                        label="Client ID"
-                                        placeholder="Enter Client ID "
-                                    /> */}
+                                    
                                 </div>
                                 <br />
                                 <div className="slds-col_padded slds-m-left_none">
@@ -116,26 +101,11 @@ function AppDetails(prop: any) {
                                             id="unique-id-4"
                                             label="Client Secret"
                                             required
-                                            placeholder="Enter Secret"
+                                            placeholder="Enter Secret Key"
                                             onChange={getsecret}
                                         />
                                     </div>
-                                    {/* <Input
-                                        iconRight={
-                                            <InputIcon
-                                                assistiveText={{
-                                                    icon: 'Clear',
-                                                }}
-                                                name="clear"
-                                                category="utility"
-
-                                            />
-                                        }
-                                        onChange={getsecret}
-                                        id="unique-id-4"
-                                        label="Client Secret"
-                                        placeholder="Enter Secret"
-                                    /> */}
+                                 
                                 </div>
                                 &nbsp;
                                 <div className="slds-align_absolute-center" >
@@ -153,8 +123,7 @@ function AppDetails(prop: any) {
                                 </div> */}
 
                                 <div id="foot" style={{ paddingTop: "0%" }}>
-                                    <div className="line"></div>
-                                    <br></br>
+                                    
                                     <div className="slds-notify_container slds-is-relative">
                                         <div className="slds-notify slds-notify_toast slds-theme_success" role="status">
                                             <span className="slds-assistive-text">success</span>
@@ -179,8 +148,7 @@ function AppDetails(prop: any) {
                                 </div>
 
                                 <div id="errorfoot" style={{ paddingTop: "0%" }}>
-                                    <div className="line"></div>
-                                    <br></br>
+                                    
                                     <div className="slds-notify_container slds-is-relative">
                                         <div className="slds-notify slds-notify_toast slds-theme_error" role="status">
                                             <span className="slds-assistive-text">error</span>

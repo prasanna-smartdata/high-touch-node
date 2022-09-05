@@ -29,38 +29,40 @@ function Review(prop: any) {
                         <form>
                             <div className="slds-align_absolute-center">
                                 <div className="slds-col slds-size_2-of-6 slds-grid_pull-padded">
-                                    <div className="slds-col_padded">
-
-                                        <div className="slds-col_padded">
-                                            <div className="rvw1">
-                                                <p>
-                                                    <b>SFMC Cofiguration</b>
-                                                </p>
-                                                Client ID <br></br>
-                                                {client}
-                                                <br></br>
-                                                <br></br>
-                                                Client Secret <br></br>
-                                                {secret}
-                                                <br></br>
-                                                <br></br>
-
+                                    <div className="slds-grid">
+                                        <div className="slds-col ">
+                                            <div>
+                                                <b>SFMC Cofiguration</b>
                                             </div>
-                                            <div className="rvw2">
-                                                <p>
-                                                    <b>Hightouch Cofiguration</b>
-                                                </p>
-                                                Name <br></br>
-                                                SFMC Prod<br></br>
-                                                <br></br>
-                                                Slug <br></br>
-                                                sfmc-prod<br></br>
-                                                <br></br>
-                                                Link <br></br>
-                                                --<br></br>
-                                                <br></br>
+
+                                            <div className="slds-m-top_xxx-small">
+                                                Client ID
                                             </div>
+                                            {client}
+                                            <br></br>
+                                            <br></br>
+                                            <div>
+                                                Client Secret
+                                            </div>
+                                            {secret}
+                                            <br></br>
+                                            <br></br>
                                         </div>
+                                        <div className="slds-col">
+                                            <div>
+                                                <b>Hightouch Cofiguration</b>
+                                            </div>
+
+                                            <div className="slds-m-top_xxx-small">
+                                                Name
+                                            </div> 
+                                            ---<br></br>
+                                            <br></br>
+                                            Slug <br></br>
+                                            ---<br></br>
+                                            <br></br>
+                                        </div>
+
                                     </div>
                                     <br />
 
