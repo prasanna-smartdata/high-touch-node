@@ -12,22 +12,21 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-import csurf from "csurf";
+//import csurf from "csurf";
 import ejs from "ejs";
 import morgan from "morgan";
 
 //import { AccessTokenResponse } from "sfmc";
 
 import { getAppConfig, getAppPort, isDev } from "./config";
-import {
-    getCookieOptions,
-    //ONE_HOUR_IN_SECONDS,
-    // TWENTY_MINS_IN_SECONDS,
-} from "./cookies";
+// import {
+//     getCookieOptions, TWENTY_MINS_IN_SECONDS,
+//     //ONE_HOUR_IN_SECONDS,
+//     // TWENTY_MINS_IN_SECONDS,
+// } from "./cookies";
 import { clientErrorHandler, errorHandler } from "./errors";
 import routes from "./routes";
-//import routes from './routes'
-//import { healthCheck } from './controller'
+ 
 // These are commented out because the code that uses
 // these imports are also commented out below and only
 // exist to demonstrate how to structure the app.
@@ -82,17 +81,17 @@ app.use(
 
 app.use(cookieParser(appConfig.cookieSecret));
 
-app.use(
-    csurf({
-        cookie: {
-            httpOnly: true,
-            sameSite: "none",
-            secure: !isDev(),
-            signed: true,
-        },
-        value: (req) => req.signedCookies["XSRF-Token"],
-    })
-);
+// app.use(
+//     csurf({
+//         cookie: {
+//             httpOnly: true,
+//             sameSite: "none",
+//             secure: !isDev(),
+//             signed: true,
+//         },
+//         value: (req) => req.signedCookies["XSRF-Token"],
+//     })
+// );
 
 app.use("/assets", express.static(join(__dirname, "dist/ui")));
 
@@ -109,9 +108,17 @@ app.use(function (_req, res, next) {
     )
     next()
 })
-routes(app)
+
+// app.use(function (req, res, next) {
+//     console.log("inside the csrf code")
+//     var token = req.csrfToken();
+//     res.cookie('XSRF-TOKEN', token);
+//     res.locals.csrfToken = token;
+//     next();
+// });
+ routes(app);
 // var csrfProtection = csurf({ cookie: true });
-// var parseForm = bodyParser.urlencoded({ extended: false });
+ // var parseForm = bodyParser.urlencoded({ extended: false });
 
 // app.post('/api/healthcheckpost', parseForm,
 //       csrfProtection, function (_req, res) {
@@ -119,20 +126,17 @@ routes(app)
 // });
 
 app.get("/*", (req: Request, res: Response) => {
-    console.log("  Token ::", "token");
 
     let token = req.csrfToken();
     console.log("XCRF Token ::", token);
-    res.cookie("XSRF-Token", req.csrfToken(), getCookieOptions());
+    res.cookie("XSRF-Token", req.csrfToken());
     res.cookie(`Cookie token name`, `encrypted cookie string Value`);
-    res.send('Cookie have been saved successfully');
-    // if (isDev() && appConfig.redirectUiToLocalhost) {
-    //     console.log("Redirecting to localhost...");
-    //     res.redirect("https://app.localhost:3000");
-    //     return;
-    // }
-
-    // res.sendFile(join(__dirname, "ui", "index.html"));
+    if (isDev() && appConfig.redirectUiToLocalhost) {
+        console.log("Redirecting to localhost...");
+        res.redirect("https://app.localhost:3000");
+        return;
+    }
+    res.sendFile(join(__dirname, "ui", "index.html"));
 });
 
 const port = getAppPort();

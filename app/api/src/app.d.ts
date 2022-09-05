@@ -7,5 +7,6 @@ declare module "app" {
         sfmcClientId: string;
         sfmcClientSecret: string;
         sfmcDefaultTenantSubdomain: string;
+        sfmcAccountId:string;
     }
 }

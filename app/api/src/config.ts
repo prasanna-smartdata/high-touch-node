@@ -39,7 +39,7 @@ export function getAppConfig(): Config {
         selfDomain: getEnvVar("SELF_DOMAIN", false, "http://localhost:8080"),
         sfmcClientId: getEnvVar("SFMC_CLIENT_ID"),
         sfmcClientSecret:  getEnvVar("SFMC_CLIENT_SECRET"),
-
+        sfmcAccountId:getEnvVar("SFMC_ACCOUNT_ID"),
         //This sub-domain comes from Hightouch BU in martek account
         sfmcDefaultTenantSubdomain: getEnvVar(
             "SFMC_DEFAULT_TENANT_SUBDOMAIN",

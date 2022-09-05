@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReactDOM from "react-dom/client";
-import { IconSettings } from "@salesforce/design-system-react"
+import { Icon, IconSettings, PageHeader } from "@salesforce/design-system-react"
 
 import actionSprite from "@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg";
 import customSprite from "@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg";
@@ -30,12 +30,11 @@ root.render(
         standardSprite={standardSprite}
         utilitySprite={utilitySprite}
     >
+        
         <React.StrictMode>
             <BrowserRouter>
                 <CookiesProvider>
-                    {/* <div>
-                    <Header></Header>
-                </div> */}
+
                     <Routes>
                         <Route path="*" element={<App />}></Route>
                     </Routes>

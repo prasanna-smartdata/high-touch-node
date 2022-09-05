@@ -13,7 +13,7 @@ code {
 }
 
 .configs {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .box {
@@ -81,12 +81,14 @@ code {
   border-radius: 5px;
 }
 
-#foot{
+#foot, #errorfoot{
   display: none;
   padding-bottom:0%;
 }
 
-
+.disabled-link {
+  pointer-events: none;
+}
 
 .form2{
   font:sans-serif;
@@ -123,7 +125,7 @@ code {
   padding-left: 1%;
   padding-right: 1%;
   position:relative; 
-  left:44%;
+  /* left:44%; */
 }
 
 .cardfooter {

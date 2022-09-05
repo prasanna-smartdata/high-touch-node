@@ -48,7 +48,7 @@ const Header = (prop: any) => {
     });
 
     return (
-        <div className="slds-path">
+        <div className="slds-path slds-m-top_xx-large">
             <div className="slds-grid slds-path__track">
                 <div className="slds-grid slds-path__scroller-container">
                     <div className="slds-path__scroller">

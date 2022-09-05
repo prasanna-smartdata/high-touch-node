@@ -10,9 +10,10 @@ import Review from "./views/ReviewSetup";
 import classNames from "classnames";
 import Header from "./components/Header";
 import { NavigationProvider } from "./components/NavigationContext";
+import { Icon, PageHeader } from "@salesforce/design-system-react";
 
 function App() {
- 
+
 
 
     return (
@@ -21,9 +22,15 @@ function App() {
             <NavigationProvider>
 
                 <Container>
-                    <div className="content">
+                    <div className="slds-m-top_xxx-small ">
+                        <PageHeader
+                            className="slds-align_absolute-center"
+                            title="Configuration Page"
+                            truncate
+                            variant="object-home"
+                        />
                         <Header></Header>
-                       
+
                         <Routes>
                             <Route path='/' element={<AppDetails />} />
 
