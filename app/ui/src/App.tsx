@@ -7,7 +7,6 @@ import { Container } from "react-bootstrap";
 import AppDetails from "./views/ApplicationSetup";
 import ConfigHightouch from "./views/ConfigHightouch";
 import Review from "./views/ReviewSetup";
-import classNames from "classnames";
 import Header from "./components/Header";
 import { NavigationProvider } from "./components/NavigationContext";
 import { Icon, PageHeader } from "@salesforce/design-system-react";

@@ -12,7 +12,7 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-//import csurf from "csurf";
+// import csurf from "csurf";
 import ejs from "ejs";
 import morgan from "morgan";
 
@@ -26,7 +26,7 @@ import { getAppConfig, getAppPort, isDev } from "./config";
 // } from "./cookies";
 import { clientErrorHandler, errorHandler } from "./errors";
 import routes from "./routes";
- 
+
 // These are commented out because the code that uses
 // these imports are also commented out below and only
 // exist to demonstrate how to structure the app.
@@ -116,15 +116,14 @@ app.use(function (_req, res, next) {
 //     res.locals.csrfToken = token;
 //     next();
 // });
- routes(app);
-// var csrfProtection = csurf({ cookie: true });
- // var parseForm = bodyParser.urlencoded({ extended: false });
 
-// app.post('/api/healthcheckpost', parseForm,
-//       csrfProtection, function (_req, res) {
-//   res.send('Successfully Validated!!');
+//var csrfProtection = csurf({ cookie: true });
+// var parseForm = bodyParser.urlencoded({ extended: false });
+
+// app.post('/api/healthcheckpost', csrfProtection, function (_req, res) {
+//     res.send('Successfully Validated!!');
 // });
-
+routes(app);
 app.get("/*", (req: Request, res: Response) => {
 
     let token = req.csrfToken();
