@@ -1,25 +1,27 @@
-import { BrandBand, Button } from "@salesforce/design-system-react";
+import {BrandBand, Button} from "@salesforce/design-system-react";
 import React from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { withNavigation } from "../components/withNavigation";
+import {Link} from "react-router-dom";
+import {useLocation} from "react-router-dom";
+import {withNavigation} from "../components/withNavigation";
 
-function Review(prop: any) {
+function Review(prop : any) {
     const loc: any = useLocation();
     const client = loc.state.client;
     const secret = loc.state.secret;
     const jwt = loc.state.jwt;
     return (
         <div className="slds-form-element slds-border_bottom slds-border_left slds-border_right">
-            <div style={{ paddingTop: "3%" }}>
-                <BrandBand
-                    id="brand-band-no-image"
+            <div style={
+                {
+                    paddingTop: "3%",
+                    padding: "220px",
+                    flexBasis: "120%",
 
-                    theme="lightning-blue">
-                    <div
-                        id="form1card"
-
-                    >
+                    // paddingBottom: "10%"
+                }
+            }>
+                <BrandBand id="brand-band-no-image" theme="lightning-blue">
+                    <div id="form1card">
                         <div className="slds-box slds-theme_default">
                             <h3 className="slds-text-heading_label slds-truncate">
                                 SFMC-HighTouch Details</h3>
@@ -56,17 +58,16 @@ function Review(prop: any) {
                                             </div>
                                             ---<br></br>
                                             <br></br>
-                                            Slug <br></br>
+                                            Slug
+                                            <br></br>
                                             ---<br></br>
                                             <br></br>
                                         </div>
 
                                     </div>
-                                    <br />
+                                    <br/>
 
                                     &nbsp;
-
-
 
 
                                 </div>
@@ -75,14 +76,16 @@ function Review(prop: any) {
 
                                 <form>
                                     <Button id="button">
-                                        <Link
-                                            to="/CheckApplicationDetails"
-                                            onClick={() => prop.updateState(false, false, true, true, true, false)}
-                                            state={{
-                                                client: client,
-                                                secret: secret,
-                                            }}
-                                        >
+                                        <Link to="/CheckApplicationDetails"
+                                            onClick={
+                                                () => prop.updateState(false, false, true, true, true, false)
+                                            }
+                                            state={
+                                                {
+                                                    client: client,
+                                                    secret: secret
+                                                }
+                                        }>
                                             Back
                                         </Link>
                                     </Button>
@@ -96,10 +99,10 @@ function Review(prop: any) {
                                                 secret: secret,
                                             }}
                                         > */}
-                                            Create
-                                      
+                                        Create
+
                                     </Button>
-                                </form >
+                                </form>
                             </div>
                         </form>
                     </div>
