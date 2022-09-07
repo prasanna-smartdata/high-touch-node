@@ -1,4 +1,4 @@
-import { healthCheck, authorize, oAuthCallback, refreshToken, getDestinations, postDestinations, syncs, onError, logOut, verifYServer2ServerOAuth } from './controller.js'
+import { healthCheck, authorize, oAuthCallback, refreshToken, getDestinations, postDestinations, syncs, onError, logOut, verifYServer2ServerOAuth, getUserInfo } from './controller.js'
 import express from "express";
 //import csurf from "csurf";
 
@@ -14,7 +14,8 @@ export default (app: any) => {
     router.get("/api/oauth2/sfmc/authorize", authorize);
     router.get("/api/oauth2/sfmc/callback",oAuthCallback);
     router.post("/api/oauth2/sfmc/refresh_token",refreshToken)
-    router.post("/api/sfmc/verifys2s",verifYServer2ServerOAuth)
+    router.post("/api/sfmc/verifys2s",verifYServer2ServerOAuth);
+    router.post("/api/sfmc/getuserinfo",getUserInfo);
     router.get("/api/oauth2/error",onError);
     router.get("/api/destinations",getDestinations);
     router.post("/api/destinations",postDestinations);

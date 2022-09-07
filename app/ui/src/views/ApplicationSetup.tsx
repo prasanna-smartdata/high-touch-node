@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 //import Button from "react-bootstrap/Button";
-import { BrandBand, Button, Card, Icon, Input, InputIcon, ProgressRing } from
+import { Alert, AlertContainer, BrandBand, Button, Card, Icon, Input, InputIcon, ProgressRing } from
     '@salesforce/design-system-react';
 import { Link, useLocation } from "react-router-dom";
-import { AuthRequestBody, verifYServer2ServerOAuth } from "../actions/ApiActions";
+import { AuthRequestBody, getUserInfo, verifYServer2ServerOAuth } from "../actions/ApiActions";
 import { useCookies } from "react-cookie";
 import { withNavigation } from "../components/withNavigation";
 import classNames from "classnames";
@@ -22,10 +22,7 @@ function AppDetails(prop: any) {
     const getsecret = (e: any) => {
         setsecret(e.target.value);
     };
-    const navigationDisableClass = classNames({
-        'pointer-events: none': !isValid,
 
-    });
 
     const verifyAccount = () => {
 
@@ -44,6 +41,10 @@ function AppDetails(prop: any) {
                 showErroFooter();
                 setIsValid(false);
             }
+        })
+
+        getUserInfo(cookies['XSRF-Token']).then((response: any) => {
+            console.log(response)
         })
 
     }
@@ -78,14 +79,14 @@ function AppDetails(prop: any) {
                         </div>
 
                         <form >
-                            <div className="slds-align_absolute-center">
+                            <div >
                                 <div className="slds-col slds-size_2-of-6 slds-grid_pull-padded">
                                     <div className="slds-col_padded">
                                         <div className="slds-col_padded">
                                             <Input
                                                 aria-describedby="error-4"
                                                 id="unique-id-4"
-                                                // required
+                                                required
                                                 onChange={getcid}
                                                 // errorText="Error Message"
                                                 label="Client ID"
@@ -101,7 +102,7 @@ function AppDetails(prop: any) {
                                                 aria-describedby="error-4"
                                                 id="unique-id-5"
                                                 label="Client Secret"
-                                                // required
+                                                required
                                                 placeholder="Enter Secret Key"
                                                 onChange={getsecret}
                                             />
@@ -137,7 +138,10 @@ function AppDetails(prop: any) {
                                                     <h2 className="slds-text-heading_small ">SFMC App Credentials Verified </h2>
                                                 </div>
                                                 <div className="slds-notify__close">
-                                                    <button className="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                                                    <button onClick={(e) => {
+                                                        e.preventDefault();
+                                                        document.getElementById("foot")?.setAttribute("class", "slds-is-collapsed");
+                                                    }} className="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
                                                         <svg className="slds-button__icon slds-button__icon_large" aria-hidden="true">
                                                             <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
                                                         </svg>
@@ -162,7 +166,10 @@ function AppDetails(prop: any) {
                                                     <h2 className="slds-text-heading_small "> Verification failed.Please check the credentials</h2>
                                                 </div>
                                                 <div className="slds-notify__close">
-                                                    <button className="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                                                    <button onClick={(e) => {
+                                                        e.preventDefault();
+                                                        document.getElementById("errorfoot")?.setAttribute("class", "slds-is-collapsed");
+                                                    }} className="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
                                                         <svg className="slds-button__icon slds-button__icon_large" aria-hidden="true">
                                                             <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
                                                         </svg>
@@ -181,10 +188,11 @@ function AppDetails(prop: any) {
 
                             <div className="slds-float_right slds-m-right_x-small">
 
-                                <Button id="button" >
-                                    <Link className={navigationDisableClass}
-                                        onClick={() => isValid && prop.updateState(false, true, false, true, false, false)}
-                                        to={isValid ? "/ConfigHightouch" : "#"}
+                                <Button id="button"  >
+                                    <Link
+                                        onClick={() => prop.updateState(false, false, true, true, true, false)}
+
+                                        to="/ReviewSetup"
                                         state={{
                                             client: client,
                                             secret: secret,

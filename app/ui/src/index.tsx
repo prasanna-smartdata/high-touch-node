@@ -7,7 +7,7 @@ import customSprite from "@salesforce-ux/design-system/assets/icons/custom-sprit
 import doctypeSprite from "@salesforce-ux/design-system/assets/icons/doctype-sprite/svg/symbols.svg";
 import standardSprite from "@salesforce-ux/design-system/assets/icons/standard-sprite/svg/symbols.svg";
 import utilitySprite from "@salesforce-ux/design-system/assets/icons/utility-sprite/svg/symbols.svg";
-import "./index.css";
+//import "./index.css";
 //import "@salesforce-ux/design-system/scss/index.scss";
 
 import App from "./App";

@@ -26,7 +26,6 @@ export const settings = {
  * Existing users would have to move any HTML blocks they had in
  * the previous category into the new one if this was changed.
  */
-const defaultCategoryName = "Vimeo Collection Templates";
 
 const client = axios.default.create({
     timeout: 20 * 1000,
@@ -34,16 +33,18 @@ const client = axios.default.create({
 
 client.interceptors.response.use(undefined, (err) => {
     if (err.response.status === 401) {
-        window.location.href = "/oauth2/sfmc/authorize";
+        window.location.href = "/api/oauth2/sfmc/authorize";
         return;
     }
 
     return Promise.reject(err);
 });
 
+
+//Call this method in App.tsx
 export async function refreshSfmcToken() {
     try {
-        await client.post("/oauth2/sfmc/refresh_token");
+        await client.post("/api/oauth2/sfmc/refresh_token");
         setTimeout(refreshSfmcToken, settings.tokenRefreshInterval);
     } catch (err) {
         console.error(
@@ -76,41 +77,41 @@ export async function getAssetByCustomerKey(
     }
 }
 
-export async function listExistingHtmlBlocks(): Promise<HtmlContentBlock[]> {
-    const assetTypeQuery: Query = {
-        property: "assetType.name",
-        simpleOperator: "equal",
-        value: "htmlblock",
-    };
+// export async function listExistingHtmlBlocks(): Promise<HtmlContentBlock[]> {
+//     const assetTypeQuery: Query = {
+//         property: "assetType.name",
+//         simpleOperator: "equal",
+//         value: "htmlblock",
+//     };
 
-    const categoryNameQuery: Query = {
-        property: "category.name",
-        simpleOperator: "equal",
-        value: defaultCategoryName,
-    };
+//     const categoryNameQuery: Query = {
+//         property: "category.name",
+//         simpleOperator: "equal",
+//         value: defaultCategoryName,
+//     };
 
-    const body: AssetQueryRequest = {
-        page: {
-            page: 1,
-            pageSize: 50,
-        },
-        query: {
-            leftOperand: assetTypeQuery,
-            logicalOperator: "AND",
-            rightOperand: categoryNameQuery,
-        },
-    };
-    try {
-        const response = await client.post<SfmcResponse<HtmlContentBlock>>(
-            "/api/sfmc/asset/v1/content/assets/query",
-            body
-        );
-        return response.data.items;
-    } catch (err) {
-        console.error("Failed to list HTML blocks", err);
-        throw err;
-    }
-}
+//     const body: AssetQueryRequest = {
+//         page: {
+//             page: 1,
+//             pageSize: 50,
+//         },
+//         query: {
+//             leftOperand: assetTypeQuery,
+//             logicalOperator: "AND",
+//             rightOperand: categoryNameQuery,
+//         },
+//     };
+//     try {
+//         const response = await client.post<SfmcResponse<HtmlContentBlock>>(
+//             "/api/sfmc/asset/v1/content/assets/query",
+//             body
+//         );
+//         return response.data.items;
+//     } catch (err) {
+//         console.error("Failed to list HTML blocks", err);
+//         throw err;
+//     }
+// }
 
 async function createAsset(
     key: string,

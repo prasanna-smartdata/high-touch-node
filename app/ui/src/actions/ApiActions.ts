@@ -31,6 +31,22 @@ export async function verifYServer2ServerOAuth(authRequest: AuthRequestBody, csr
     return Promise.resolve(response);
 }
 
+export async function getUserInfo( csrf: any) {
+    try {
+        axios.defaults.headers['X-CSRF-Token'] = csrf;
+
+        await axios.get(apiTypes.GET_USER_INFO_URL)
+            .then((resp: any) => {
+                console.log(resp); 
+            })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 export interface AuthRequestBody {
     clientId: string,
     secretKey: string,

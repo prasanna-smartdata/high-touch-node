@@ -30,11 +30,18 @@ function ConfigHightouch(prop: any) {
                                 Connect My Experience</h3>
                         </div>
                         <form>
-                            <div className="slds-align_absolute-center">
+                            <div className="slds-m-left_x-large">
                                 <div className="slds-col slds-size_2-of-6 slds-grid_pull-padded">
-                                    <div className="slds-col_padded ">
+                                    <div className="slds-col_padded slds-m-top_x-small">
                                         <div className="slds-col_padded ">
-                                            <Button id="ht"  variant="brand" className="slds-size_1-of-2"  >ht</Button>
+                                            <Button id="ht" 
+                                            	style={{
+                                                    height: '100px',
+                                                    marginLeft: '5px',
+                                                    display: 'inline-block',
+                                                    fontSize:'50px',
+                                                }}
+                                            variant="brand" className="slds-size_1-of-2"  >ht</Button>
                                             <br></br>
                                             <br></br>
                                         </div>
@@ -96,6 +103,8 @@ function ConfigHightouch(prop: any) {
                         </form>
 
                     </div>
+                    <br></br>
+
                 </BrandBand>
             </div>
         </div>

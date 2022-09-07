@@ -25,7 +25,7 @@ function Review(prop: any) {
                                 SFMC-HighTouch Details</h3>
                         </div>
                         <form>
-                            <div className="slds-align_absolute-center slds-m-top_x-large">
+                            <div className=" slds-m-left_x-large slds-m-top_x-large">
                                 <div className="slds-col slds-size_2-of-6 slds-grid_pull-padded">
                                     <div className="slds-grid">
                                         <div className="slds-col ">
@@ -76,8 +76,8 @@ function Review(prop: any) {
                                 <form>
                                     <Button id="button">
                                         <Link
-                                            to="/ConfigHightouch"
-                                            onClick={() => prop.updateState(false, true, false, true, false, false)}
+                                            to="/CheckApplicationDetails"
+                                            onClick={() => prop.updateState(false, false, true, true, true, false)}
                                             state={{
                                                 client: client,
                                                 secret: secret,
@@ -88,21 +88,23 @@ function Review(prop: any) {
                                     </Button>
                                     &nbsp; &nbsp;
                                     <Button id="button">
-                                        <Link
+                                        {/* <Link
                                             to="/ReviewSetup"
                                             onClick={() => prop.updateState(false, false, true, true, true, false)}
                                             state={{
                                                 client: client,
                                                 secret: secret,
                                             }}
-                                        >
+                                        > */}
                                             Create
-                                        </Link>
+                                      
                                     </Button>
                                 </form >
                             </div>
                         </form>
                     </div>
+                    <br></br>
+
                 </BrandBand>
             </div>
         </div>

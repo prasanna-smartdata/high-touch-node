@@ -9,36 +9,36 @@ import ConfigHightouch from "./views/ConfigHightouch";
 import Review from "./views/ReviewSetup";
 import Header from "./components/Header";
 import { NavigationProvider } from "./components/NavigationContext";
-import { Icon, PageHeader } from "@salesforce/design-system-react";
+import { Icon, PageHeader, Panel } from "@salesforce/design-system-react";
+import { refreshSfmcToken } from "./sfmcClient";
 
 function App() {
 
-
+ useEffect(()=>{
+    refreshSfmcToken();
+ },[])
 
     return (
-        <div className="App configs" >
+        <div  >
 
             <NavigationProvider>
 
-                <Container>
-                    <div className="slds-m-top_xxx-small ">
-                        <PageHeader
-                            className="slds-align_absolute-center"
-                            title="Configuration Page"
-                            truncate
-                            variant="object-home"
-                        />
+                <Panel className="slds-p-around_xxx-large">
+                    <div className="slds-m-top_xxx-small slds-p-around_xxx-large">
+                        <div className="slds-text-heading_large">
+                            <h2>Configuration Pages</h2>
+                        </div>
                         <Header></Header>
 
                         <Routes>
                             <Route path='/' element={<AppDetails />} />
 
                             <Route path='/CheckApplicationDetails' element={<AppDetails />} />
-                            <Route path='/ConfigHightouch' element={<ConfigHightouch />} />
+                            {/* <Route path='/ConfigHightouch' element={<ConfigHightouch />} /> */}
                             <Route path='/ReviewSetup' element={<Review />} />
                         </Routes>
                     </div>
-                </Container>
+                </Panel>
             </NavigationProvider>
         </div>
 

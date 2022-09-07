@@ -16,9 +16,9 @@ const Header = (prop: any) => {
             case "/CheckApplicationDetails":
                 prop.updateState(true, false, false,false,false,false);
                 break;
-            case "/ConfigHightouch":
-                prop.updateState(false, true, false,true,false,false);
-                break;
+            // case "/ConfigHightouch":
+            //     prop.updateState(false, true, false,true,false,false);
+            //     break;
             case "/ReviewSetup":
                 prop.updateState(false, false, true,true,true,false);
                 break;
@@ -66,7 +66,7 @@ const Header = (prop: any) => {
                                         <span className="slds-path__title">S2S Application Setup</span>
                                     </a>
                                 </li>
-                                <li className={navigationHightouchClass} role="presentation">
+                                {/* <li className={navigationHightouchClass} role="presentation">
                                     <a aria-selected="false" className="slds-path__link" id="path-2" role="option" >
                                         <span className="slds-path__stage">
                                             <svg className="slds-icon slds-icon_x-small" aria-hidden="true">
@@ -75,7 +75,7 @@ const Header = (prop: any) => {
                                         </span>
                                         <span className="slds-path__title">Configure HighTouch</span>
                                     </a>
-                                </li>
+                                </li> */}
                                 <li className={navigationSetupClass} role="presentation">
                                     <a aria-selected="false" className="slds-path__link" id="path-3" role="option"  >
                                         <span className="slds-path__stage">

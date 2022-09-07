@@ -91,41 +91,7 @@ async function verifyOAuth2Callback(
     return code;
 }
 
-export const verifYServer2ServerOAuth = async (req: Request, res: Response) => {
-    const tssd = req.query.tssd || appConfig.sfmcDefaultTenantSubdomain;
-    console.log('inside')
-    await sfmcClient.post<AccessTokenResponse>(
-        `https://${tssd}.auth.marketingcloudapis.com/v2/token`,
-        {
-            grant_type: "client_credentials",
-            scope: "email_read email_write email_send",
-            account_id: appConfig.sfmcAccountId,
-            client_id: req.body.clientId,
-            client_secret: req.body.secretKey,
-        }
-    ).then((resp: any) => {
 
-        const accessTokenResp = resp.data;
-        res.cookie(
-            "sfmc_access_token",
-            accessTokenResp.access_token,
-            getCookieOptions(TWENTY_MINS_IN_SECONDS)
-        );
-        res.cookie(
-            "sfmc_refresh_token",
-            accessTokenResp.refresh_token,
-            getCookieOptions(ONE_HOUR_IN_SECONDS)
-        );
-
-        res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
-        console.log("successfull")
-        return res.sendStatus(200);
-    })
-        .catch((_err:any) => {
-            console.log("err")
-            return res.sendStatus(500)
-        });
-}
 export const oAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
     const code = await verifyOAuth2Callback(req, next);
     const tssd = req.query.tssd || appConfig.sfmcDefaultTenantSubdomain;
@@ -140,23 +106,82 @@ export const oAuthCallback = async (req: Request, res: Response, next: NextFunct
         }
     );
     console.log("Response:", resp.data);
-    const accessTokenResp = resp.data;
-    res.cookie(
-        "sfmc_access_token",
-        accessTokenResp.access_token,
-        getCookieOptions(TWENTY_MINS_IN_SECONDS)
-    );
-    res.cookie(
-        "sfmc_refresh_token",
-        accessTokenResp.refresh_token,
-        getCookieOptions(ONE_HOUR_IN_SECONDS)
-    );
+  //  const accessTokenResp = resp.data;
 
-    res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
+    // res.cookie(
+    //     "sfmc_access_token",
+    //     accessTokenResp.access_token,
+    //     getCookieOptions(TWENTY_MINS_IN_SECONDS)
+    // );
+    // res.cookie(
+    //     "sfmc_refresh_token",
+    //     accessTokenResp.refresh_token,
+    //     getCookieOptions(ONE_HOUR_IN_SECONDS)
+    // );
+
+    // res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
 
     res.redirect("/");
 }
 
+export const verifYServer2ServerOAuth = async (req: Request, res: Response) => {
+
+    //Reading the tssd from the cookie.
+    const tssd = req.signedCookies["tssdCookie"] || appConfig.sfmcDefaultTenantSubdomain;
+    console.log('inside', req.signedCookies["tssdCookie"])
+    await sfmcClient.post<AccessTokenResponse>(
+        `https://${tssd}.auth.marketingcloudapis.com/v2/token`,
+        {
+            grant_type: "client_credentials",
+            scope: "email_read email_write email_send",
+            //  account_id: appConfig.sfmcAccountId,
+            client_id: req.body.clientId,
+            client_secret: req.body.secretKey,
+        }
+    ).then((_resp: any) => {
+
+        //const accessTokenResp = resp.data;
+        // res.cookie(
+        //     "sfmc_access_token",
+        //     accessTokenResp.access_token,
+        //     getCookieOptions(TWENTY_MINS_IN_SECONDS)
+        // );
+        // res.cookie(
+        //     "sfmc_refresh_token",
+        //     accessTokenResp.refresh_token,
+        //     getCookieOptions(ONE_HOUR_IN_SECONDS)
+        // );
+
+        // res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
+        console.log("successfull")
+        return res.sendStatus(200);
+    })
+        .catch((_err: any) => {
+            console.log("err")
+            return res.sendStatus(500)
+        });
+}
+
+export const getUserInfo = async (req: Request, res: Response) => {
+    try {
+        const tssd = req.signedCookies["tssdCookie"]
+        const sfmcToken = req.signedCookies["sfmc_access_token"];
+        res = await axios.get(
+            `https://${tssd}.auth.marketingcloudapis.com/v2/userinfo`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sfmcToken}`,
+                }
+            }
+        );
+
+        console.log(res);
+    } catch (error) {
+        console.log(error)
+
+    }
+}
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     console.log("Request::", JSON.stringify(req));
     if (
