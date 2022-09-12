@@ -12,14 +12,22 @@ import { NavigationProvider } from "./components/NavigationContext";
 import { Icon, PageHeader, Panel } from "@salesforce/design-system-react";
 import { refreshSfmcToken } from "./sfmcClient";
 
-function App() {
 
- useEffect(()=>{
-     refreshSfmcToken();
- },[])
+function getCookie(name: any) {
+    const cookieDict = document.cookie.split(';')
+        .map((x) => x.split('='))
+        .reduce((accum, current) => { accum[current[0]] = current[1]; return accum; }, Object());
+    return cookieDict[name];
+}
+function App() {
+    const token = getCookie("_csrf")
+
+    useEffect(() => {
+        if (token) refreshSfmcToken(token);
+    }, [token])
 
     return (
-        <div  className="slds-p-around_x-small" >
+        <div className="slds-p-around_x-small" >
 
             <NavigationProvider>
 

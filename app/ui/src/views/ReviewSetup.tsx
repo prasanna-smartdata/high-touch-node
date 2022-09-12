@@ -153,7 +153,7 @@ function Review(prop: any) {
                                             <h2 className="slds-text-heading_small">You're almost done connecting the Salesforce Marketing Cloud to Hightouch! Please open this
                                                 link in a new tab to add it to your Hightouch workspace. You must link it to your workspace in order to complete the connection.
 
-                                                <a href="#">{redirectUri}</a>
+                                                <a target="_blank" href={redirectUri}>{redirectUri}</a>
                                             </h2>
                                         </div>
                                         <div className="slds-notify__close">

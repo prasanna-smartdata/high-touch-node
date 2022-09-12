@@ -42,31 +42,23 @@ client.interceptors.response.use(undefined, (err) => {
 
 
 //Call this method in App.tsx
-export async function refreshSfmcToken() {
+export async function refreshSfmcToken(token: string) {
     try {
 
-         await client.get('/api/getToken').then(async (res: any) => {
-
-            const token = res.data.csrfToken;
-
-            await client({
-                method: 'POST',
-                url: "/oauth2/sfmc/refresh_token",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-        })
-        .then((resp:any)=>{
+        await client({
+            method: 'POST',
+            url: "/oauth2/sfmc/refresh_token",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then((resp: any) => {
                 console.log(resp)
-        })
-        .catch((err:any)=>{
-            console.log(err)
+            })
+            .catch((err: any) => {
+                console.log(err)
 
-        })
-
-
+            }) 
 
         setTimeout(refreshSfmcToken, settings.tokenRefreshInterval);
     } catch (err) {

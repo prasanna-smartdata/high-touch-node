@@ -10,7 +10,7 @@ export default (app: any) => {
 
     // router.use(csrfProtection);
     //To test the server is running
-    router.get("/healthcheck", healthCheck);
+    router.get("/api/healthcheck", healthCheck);
 
     router.get("/oauth2/sfmc/authorize", authorize);
     router.get("/oauth2/sfmc/callback", oAuthCallback);

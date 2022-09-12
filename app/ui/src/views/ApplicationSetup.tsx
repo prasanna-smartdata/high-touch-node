@@ -105,7 +105,7 @@ function AppDetails(prop: any) {
                                 </svg>
                             </span>
                             <div >
-                                <div className="slds-text-heading_large">SFMC App Credentials Verified </div>
+                                <div className="slds-text-heading_small">SFMC App Credentials Verified </div>
                             </div>
                             <div className="slds-notify__close">
                                 <button onClick={(e) => {
