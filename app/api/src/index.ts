@@ -4,15 +4,12 @@ import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
 import express, { Request, Response } from "express";
-
-
-// import jwt from "jsonwebtoken";
-
+ 
 // Middleware
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-// import csurf from "csurf";
+import csurf from "csurf";
 import ejs from "ejs";
 import morgan from "morgan";
 
@@ -78,8 +75,9 @@ app.use(
         },
     })
 );
-
+ 
 app.use(cookieParser(appConfig.cookieSecret));
+var csrfProtection = csurf({ cookie: true })
 
 // app.use(
 //     csurf({
@@ -92,7 +90,6 @@ app.use(cookieParser(appConfig.cookieSecret));
 //         value: (req) => req.signedCookies["XSRF-Token"],
 //     })
 // );
-
 app.use("/assets", express.static(join(__dirname, "dist/ui")));
 
 // Setup the error handling middlewares last.
@@ -109,21 +106,14 @@ app.use(function (_req, res, next) {
     next()
 })
 
-// app.use(function (req, res, next) {
-//     console.log("inside the csrf code")
-//     var token = req.csrfToken();
-//     res.cookie('XSRF-TOKEN', token);
-//     res.locals.csrfToken = token;
-//     next();
-// });
-
-//var csrfProtection = csurf({ cookie: true });
-// var parseForm = bodyParser.urlencoded({ extended: false });
-
-// app.post('/api/healthcheckpost', csrfProtection, function (_req, res) {
-//     res.send('Successfully Validated!!');
-// });
+ 
+app.get('/api/getToken', csrfProtection, function (req, res) {
+    // Generate a tocken and send it to the view
+    res.send({ csrfToken: req.csrfToken() })
+})
 routes(app);
+
+
 app.get("/*", (req: Request, res: Response) => {
 
     let token = req.csrfToken();
@@ -149,3 +139,4 @@ if (isDev()) {
 } else {
     app.listen(port, () => console.log(`Listening on port ${port}`));
 }
+ 

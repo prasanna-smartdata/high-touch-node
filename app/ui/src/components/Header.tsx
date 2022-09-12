@@ -8,19 +8,19 @@ const Header = (prop: any) => {
     const location = useLocation();
     console.log(location.pathname);
 
-    const { isAppDetialsPath, isHightouchPath, isSetupPath, isAppDetialsDone, isHightouchDone, isSetupDone } = prop;
+    const { isAppDetialsPath,  isSetupPath, isAppDetialsDone,  isSetupDone } = prop;
 
     useEffect(() => {
         switch (location.pathname) {
             case "/":
             case "/CheckApplicationDetails":
-                prop.updateState(true, false, false,false,false,false);
+                prop.updateState(true, false, false,false);
                 break;
             // case "/ConfigHightouch":
             //     prop.updateState(false, true, false,true,false,false);
             //     break;
             case "/ReviewSetup":
-                prop.updateState(false, false, true,true,true,false);
+                prop.updateState(false, true, true,false);
                 break;
             default:
                 break;
@@ -34,12 +34,7 @@ const Header = (prop: any) => {
         'slds-is-incomplete': !isAppDetialsPath,
         'slds-is-complete': isAppDetialsDone,
     });
-    const navigationHightouchClass = classNames({
-        'slds-path__item': true,
-        'btn-slds-is-current slds-is-active': !isHightouchDone && isHightouchPath,
-        'slds-is-incomplete': !isHightouchPath,
-        'slds-is-complete': isHightouchDone,
-    });
+    
     const navigationSetupClass = classNames({
         'slds-path__item': true,
         'btn-slds-is-current slds-is-active': !isSetupDone && isSetupPath,
@@ -66,16 +61,7 @@ const Header = (prop: any) => {
                                         <span className="slds-path__title">S2S Application Setup</span>
                                     </a>
                                 </li>
-                                {/* <li className={navigationHightouchClass} role="presentation">
-                                    <a aria-selected="false" className="slds-path__link" id="path-2" role="option" >
-                                        <span className="slds-path__stage">
-                                            <svg className="slds-icon slds-icon_x-small" aria-hidden="true">
-                                                <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
-                                            </svg>
-                                        </span>
-                                        <span className="slds-path__title">Configure HighTouch</span>
-                                    </a>
-                                </li> */}
+                               
                                 <li className={navigationSetupClass} role="presentation">
                                     <a aria-selected="false" className="slds-path__link" id="path-3" role="option"  >
                                         <span className="slds-path__stage">

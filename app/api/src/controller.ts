@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 import axios from "axios";
 import { AccessTokenResponse } from "sfmc";
 import { sfmcClient } from './sfmcClient'
-import { getCookieOptions, ONE_HOUR_IN_SECONDS, TWENTY_MINS_IN_SECONDS } from "./cookies";
+import { Connect } from "app";
+// import { getCookieOptions, ONE_HOUR_IN_SECONDS, TWENTY_MINS_IN_SECONDS } from "./cookies";
 
 
 const appConfig = getAppConfig();
@@ -15,6 +16,8 @@ export const healthCheck = (_req: Request, res: Response) => {
 }
 
 export const authorize = async (_req: Request, res: Response, next: NextFunction) => {
+    console.error("authorize inside");
+
     const authUrl = new URL(
         `https://${appConfig.sfmcDefaultTenantSubdomain}.auth.marketingcloudapis.com/v2/authorize`
     );
@@ -32,6 +35,7 @@ export const authorize = async (_req: Request, res: Response, next: NextFunction
         });
         authUrl.searchParams.append("state", state);
 
+        console.log(authUrl.toString());
         res.redirect(authUrl.toString());
         return;
     } catch (err) {
@@ -93,6 +97,9 @@ async function verifyOAuth2Callback(
 
 
 export const oAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
+
+    console.log("inside oAuthCallback");
+
     const code = await verifyOAuth2Callback(req, next);
     const tssd = req.query.tssd || appConfig.sfmcDefaultTenantSubdomain;
     const resp = await sfmcClient.post<AccessTokenResponse>(
@@ -106,25 +113,32 @@ export const oAuthCallback = async (req: Request, res: Response, next: NextFunct
         }
     );
     console.log("Response:", resp.data);
-  //  const accessTokenResp = resp.data;
+    const accessTokenResp = resp.data;
+    console.log("accessTokenResp.access_token:", accessTokenResp.access_token);
 
-    // res.cookie(
-    //     "sfmc_access_token",
-    //     accessTokenResp.access_token,
-    //     getCookieOptions(TWENTY_MINS_IN_SECONDS)
-    // );
-    // res.cookie(
-    //     "sfmc_refresh_token",
-    //     accessTokenResp.refresh_token,
-    //     getCookieOptions(ONE_HOUR_IN_SECONDS)
-    // );
+    res.cookie(
+        "sfmc_access_token",
+        accessTokenResp.access_token,
+        { expires: new Date(Date.now() + 900000), httpOnly: true }
+    );
+    res.cookie(
+        "sfmc_refresh_token",
+        accessTokenResp.refresh_token,
+        { expires: new Date(Date.now() + 900000), httpOnly: true }
+    );
 
-    // res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
+    res.cookie("sfmc_tssd", tssd,
+        { expires: new Date(Date.now() + 900000), httpOnly: true }
+    );
+    console.log(req.cookies);
+
+    console.log("Response saved:", req.signedCookies);
+
 
     res.redirect("/");
 }
 
-export const verifYServer2ServerOAuth = async (req: Request, res: Response) => {
+export const verifYServer2ServerOAuth = async (req: Request, res: Response, next: NextFunction) => {
 
     //Reading the tssd from the cookie.
     const tssd = req.signedCookies["tssdCookie"] || appConfig.sfmcDefaultTenantSubdomain;
@@ -134,7 +148,6 @@ export const verifYServer2ServerOAuth = async (req: Request, res: Response) => {
         {
             grant_type: "client_credentials",
             scope: "email_read email_write email_send",
-            //  account_id: appConfig.sfmcAccountId,
             client_id: req.body.clientId,
             client_secret: req.body.secretKey,
         }
@@ -156,17 +169,23 @@ export const verifYServer2ServerOAuth = async (req: Request, res: Response) => {
         console.log("successfull")
         return res.sendStatus(200);
     })
-        .catch((_err: any) => {
+        .catch((err: any) => {
             console.log("err")
-            return res.sendStatus(500)
+            next(err);
         });
 }
 
 export const getUserInfo = async (req: Request, res: Response) => {
+
+    let object: any = {}
     try {
-        const tssd = req.signedCookies["tssdCookie"]
-        const sfmcToken = req.signedCookies["sfmc_access_token"];
-        res = await axios.get(
+        // const tssd = req.signedCookies["tssdCookie"]
+        // const sfmcToken = req.signedCookies["sfmc_access_token"];
+        const tssd = req.cookies["sfmc_tssd"]
+        const sfmcToken = req.cookies["sfmc_access_token"];
+        console.log("getUserInfo", tssd);
+
+        await axios.get(
             `https://${tssd}.auth.marketingcloudapis.com/v2/userinfo`,
             {
                 headers: {
@@ -174,26 +193,62 @@ export const getUserInfo = async (req: Request, res: Response) => {
                     Authorization: `Bearer ${sfmcToken}`,
                 }
             }
-        );
+        ).then((resp: any) => {
+            if (resp.data) {
+                const userId = resp.data.user.sub;
+                const email = resp.data.user.email;
+                const accountId = resp.data.organization.enterprise_id;
+                res.cookie("sfmc_userId", userId,
+                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                );
+                res.cookie("sfmc_email", email,
+                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                );
+                res.cookie("sfmc_accountId", accountId,
+                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                );
+                object = {
+                    userId: userId,
+                    email: email,
+                    accountId: accountId,
+                    subdomain: tssd
+                }
+            }
+            return res.send(object);
+        })
 
-        console.log(res);
     } catch (error) {
+        return res.send(error);
         console.log(error)
 
     }
 }
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Request::", JSON.stringify(req));
+    //console.log("Request::", JSON.stringify(req));
+
+    // if (
+    //     !req.signedCookies["sfmc_tssd"] ||
+    //     !req.signedCookies["sfmc_refresh_token"]
+    // ) {
+
+    //     res.status(401).send();
+    //     return;
+    // }
+
     if (
-        !req.signedCookies["sfmc_tssd"] ||
-        !req.signedCookies["sfmc_refresh_token"]
+        !req.cookies["sfmc_tssd"] ||
+        !req.cookies["sfmc_refresh_token"]
     ) {
+
         res.status(401).send();
         return;
     }
 
-    const tssd = req.signedCookies["sfmc_tssd"];
-    const refreshToken = req.signedCookies["sfmc_refresh_token"];
+    // const tssd = req.signedCookies["sfmc_tssd"];
+    // const refreshToken = req.signedCookies["sfmc_refresh_token"];
+
+    const tssd = req.cookies["sfmc_tssd"];
+    const refreshToken = req.cookies["sfmc_refresh_token"];
 
     try {
         const resp = await sfmcClient.post<AccessTokenResponse>(
@@ -205,23 +260,23 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
                 refresh_token: refreshToken,
             }
         );
-        console.log("Respo::", resp);
         const accessTokenResp = resp.data;
         res.cookie(
             "sfmc_access_token",
             accessTokenResp.access_token,
-            getCookieOptions(TWENTY_MINS_IN_SECONDS)
+            { expires: new Date(Date.now() + 900000), httpOnly: true }
         );
         res.cookie(
             "sfmc_tssd",
             tssd,
-            getCookieOptions(TWENTY_MINS_IN_SECONDS)
+            { expires: new Date(Date.now() + 900000), httpOnly: true }
         );
         res.cookie(
             "sfmc_refresh_token",
             accessTokenResp.refresh_token,
-            getCookieOptions(ONE_HOUR_IN_SECONDS)
+            { expires: new Date(Date.now() + 900000), httpOnly: true }
         );
+        console.log("refreshToken", req.cookies);
 
         res.status(200).send();
     } catch (err: any) {
@@ -238,20 +293,38 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
-export const getDestinations = async (req: Request, res: Response) => {
-    console.log("URL Hit::");
-    const resp = await axios.get(
-        `https://api.hightouch.io/api/v1/destinations?orderBy=id`,
-        {
-            headers: {
-                Authorization: "Bearer eba8870f-973a-42f1-bfcb-9c2dda808be4",
-            },
-        }
-    );
+export const connectToHightouch = async (req: Request, res: Response) => {
+    console.log("connectToHightouch Hit::");
+    try {
 
-    console.log("Respo::", req);
-    console.log("Response:", resp.data);
-    res.redirect("/");
+
+        const payLoad: Connect = {
+            accountId: req.cookies["sfmc_accountId"],
+            userId: req.cookies["sfmc_userId"],
+            email: req.cookies["sfmc_email"],
+            resources: {
+                subdomain: req.cookies["sfmc_tssd"],
+                clientId: req.body.clientId,
+                clientSecret: req.body.secretKey,
+            }
+        }
+        const resp = await axios.post(
+            `https://api.hightouch.io/api/partner-connect/v1/sfmc/connect`, payLoad,
+            {
+                headers: {
+                    Authorization: "Basic c2ZtYzp3eEVHQnRDb1VNOXR5VDBvOXNCaA==",
+                    "Content-Type": "application/json"
+                },
+
+            }
+        )
+
+        console.log("Response of connectHightouch:", resp.data);
+        return res.status(200).send(resp.data);
+    } catch (error) {
+        console.log("Error:", Error);
+
+    }
 }
 
 export const postDestinations = async (req: Request, res: Response) => {
@@ -302,7 +375,6 @@ export const onError = (req: Request, _res: Response, next: NextFunction) => {
 export const logOut = (_req: Request, res: Response) => {
     res.clearCookie("sfmc_access_token");
     res.clearCookie("sfmc_refresh_token");
-    res.clearCookie("vimeo_access_token");
     res.clearCookie("sfmc_tssd");
     res.clearCookie("XSRF-Token");
 

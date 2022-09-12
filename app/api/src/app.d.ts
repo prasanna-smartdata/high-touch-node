@@ -7,6 +7,16 @@ declare module "app" {
         sfmcClientId: string;
         sfmcClientSecret: string;
         sfmcDefaultTenantSubdomain: string;
-        sfmcAccountId:string;
+    }
+
+    export interface Connect {
+        accountId: string,
+        userId: string,
+        email: string,
+        resources: {
+            subdomain: string,
+            clientId: string,
+            clientSecret: string
+        }
     }
 }

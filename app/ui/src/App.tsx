@@ -15,15 +15,15 @@ import { refreshSfmcToken } from "./sfmcClient";
 function App() {
 
  useEffect(()=>{
-    refreshSfmcToken();
+     refreshSfmcToken();
  },[])
 
     return (
-        <div  >
+        <div  className="slds-p-around_x-small" >
 
             <NavigationProvider>
 
-                <Panel className="slds-p-around_xxx-large">
+                <Panel >
                     <div className="slds-m-top_xxx-small slds-p-around_xxx-large">
                         <div className="slds-text-heading_large">
                             <h2>Configuration Pages</h2>

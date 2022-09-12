@@ -1,14 +1,10 @@
 import * as apiTypes from '../constants/ApiConstants';
 const axios = require('axios').default;
-
-export async function verifYServer2ServerOAuth(authRequest: AuthRequestBody, csrf: any): Promise<string> {
+// Call the s2s Api
+export async function verifYServer2ServerOAuth(authRequest: AuthRequestBody): Promise<string> {
     let response = '';
     try {
-        axios.defaults.headers['X-CSRF-Token'] = csrf;
-        // const headers = { 
-        //     'Authorization': 'Bearer my-token',
-        //     'My-Custom-Header': 'foobar'
-        // };
+
 
         await axios.post(apiTypes.VERIFFY_S2S_URL, authRequest)
             .then((resp: any) => {
@@ -31,13 +27,16 @@ export async function verifYServer2ServerOAuth(authRequest: AuthRequestBody, csr
     return Promise.resolve(response);
 }
 
-export async function getUserInfo( csrf: any) {
+//Getting user info
+export async function getUserInfo(): Promise<object> {
+
+    let data = {};
     try {
-        axios.defaults.headers['X-CSRF-Token'] = csrf;
+
 
         await axios.get(apiTypes.GET_USER_INFO_URL)
             .then((resp: any) => {
-                console.log(resp); 
+                data = resp.data;
             })
 
 
@@ -45,8 +44,28 @@ export async function getUserInfo( csrf: any) {
         console.log(error)
     }
 
+    return Promise.resolve(data)
 }
+export async function connectToHightouch(authRequest: AuthRequestBody): Promise<object> {
+    let data={}
+    try {
 
+        await axios.post(apiTypes.CONNECT_HIGHTOUCH_URL, authRequest)
+            .then((resp: any) => { 
+                if (resp.status === 200) {
+                    data=resp.data;
+                }  
+ 
+            })
+
+
+    } catch (error) {
+        console.log(error)
+         
+    }
+
+    return Promise.resolve(data);
+}
 export interface AuthRequestBody {
     clientId: string,
     secretKey: string,
