@@ -6,9 +6,7 @@ import express from "express";
 export default (app: any) => {
     var router = express.Router();
 
-    // var csrfProtection = csurf({ cookie: true });
-
-    // router.use(csrfProtection);
+    
     //To test the server is running
     router.get("/api/healthcheck", healthCheck);
 
@@ -18,8 +16,7 @@ export default (app: any) => {
     router.post("/api/sfmc/verifys2s", verifYServer2ServerOAuth);
     router.get("/api/sfmc/getuserinfo", getUserInfo);
     router.get("/api/oauth2/error", onError);
-    router.post("/api/connect-hightouch", connectToHightouch);
-   
+    router.post("/api/connect-hightouch", connectToHightouch); 
 
     router.get("/logout", logOut);
 

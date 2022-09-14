@@ -5,7 +5,7 @@ import axios from "axios";
 import { AccessTokenResponse } from "sfmc";
 import { sfmcClient } from './sfmcClient'
 import { Connect } from "app";
-// import { getCookieOptions, ONE_HOUR_IN_SECONDS, TWENTY_MINS_IN_SECONDS } from "./cookies";
+import { getCookieOptions, ONE_HOUR_IN_SECONDS, TWENTY_MINS_IN_SECONDS } from "./cookies";
 
 
 const appConfig = getAppConfig();
@@ -112,26 +112,24 @@ export const oAuthCallback = async (req: Request, res: Response, next: NextFunct
             redirect_uri: `${appConfig.selfDomain}${sfmcOAuthCallbackPath}`,
         }
     );
-    console.log("Response:", resp.data);
+
+
     const accessTokenResp = resp.data;
-    console.log("accessTokenResp.access_token:", accessTokenResp.access_token);
+
 
     res.cookie(
         "sfmc_access_token",
         accessTokenResp.access_token,
-        { expires: new Date(Date.now() + 900000), httpOnly: true }
+        getCookieOptions(TWENTY_MINS_IN_SECONDS)
     );
     res.cookie(
         "sfmc_refresh_token",
         accessTokenResp.refresh_token,
-        { expires: new Date(Date.now() + 900000), httpOnly: true }
+        getCookieOptions(ONE_HOUR_IN_SECONDS)
     );
 
-    res.cookie("sfmc_tssd", tssd,
-        { expires: new Date(Date.now() + 900000), httpOnly: true }
+    res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS)
     );
-    console.log(req.cookies);
-
     console.log("Response saved:", req.signedCookies);
 
 
@@ -141,8 +139,8 @@ export const oAuthCallback = async (req: Request, res: Response, next: NextFunct
 export const verifYServer2ServerOAuth = async (req: Request, res: Response, next: NextFunction) => {
 
     //Reading the tssd from the cookie.
-    const tssd = req.signedCookies["tssdCookie"] || appConfig.sfmcDefaultTenantSubdomain;
-    console.log('inside', req.signedCookies["tssdCookie"])
+    const tssd = req.signedCookies["sfmc_tssd"] || appConfig.sfmcDefaultTenantSubdomain;
+    console.log('inside', req.signedCookies["sfmc_tssd"])
     await sfmcClient.post<AccessTokenResponse>(
         `https://${tssd}.auth.marketingcloudapis.com/v2/token`,
         {
@@ -153,20 +151,6 @@ export const verifYServer2ServerOAuth = async (req: Request, res: Response, next
         }
     ).then((_resp: any) => {
 
-        //const accessTokenResp = resp.data;
-        // res.cookie(
-        //     "sfmc_access_token",
-        //     accessTokenResp.access_token,
-        //     getCookieOptions(TWENTY_MINS_IN_SECONDS)
-        // );
-        // res.cookie(
-        //     "sfmc_refresh_token",
-        //     accessTokenResp.refresh_token,
-        //     getCookieOptions(ONE_HOUR_IN_SECONDS)
-        // );
-
-        // res.cookie("sfmc_tssd", tssd, getCookieOptions(TWENTY_MINS_IN_SECONDS));
-        console.log("successfull")
         return res.sendStatus(200);
     })
         .catch((err: any) => {
@@ -179,11 +163,8 @@ export const getUserInfo = async (req: Request, res: Response) => {
 
     let object: any = {}
     try {
-        // const tssd = req.signedCookies["tssdCookie"]
-        // const sfmcToken = req.signedCookies["sfmc_access_token"];
-        const tssd = req.cookies["sfmc_tssd"]
-        const sfmcToken = req.cookies["sfmc_access_token"];
-        console.log("getUserInfo", tssd);
+        const tssd = req.signedCookies["sfmc_tssd"]
+        const sfmcToken = req.signedCookies["sfmc_access_token"];
 
         await axios.get(
             `https://${tssd}.auth.marketingcloudapis.com/v2/userinfo`,
@@ -199,13 +180,13 @@ export const getUserInfo = async (req: Request, res: Response) => {
                 const email = resp.data.user.email;
                 const accountId = resp.data.organization.enterprise_id;
                 res.cookie("sfmc_userId", userId,
-                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                    getCookieOptions(TWENTY_MINS_IN_SECONDS)
                 );
                 res.cookie("sfmc_email", email,
-                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                    getCookieOptions(TWENTY_MINS_IN_SECONDS)
                 );
                 res.cookie("sfmc_accountId", accountId,
-                    { expires: new Date(Date.now() + 900000), httpOnly: true }
+                    getCookieOptions(TWENTY_MINS_IN_SECONDS)
                 );
                 object = {
                     userId: userId,
@@ -224,31 +205,18 @@ export const getUserInfo = async (req: Request, res: Response) => {
     }
 }
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
-    //console.log("Request::", JSON.stringify(req));
-
-    // if (
-    //     !req.signedCookies["sfmc_tssd"] ||
-    //     !req.signedCookies["sfmc_refresh_token"]
-    // ) {
-
-    //     res.status(401).send();
-    //     return;
-    // }
 
     if (
-        !req.cookies["sfmc_tssd"] ||
-        !req.cookies["sfmc_refresh_token"]
+        !req.signedCookies["sfmc_tssd"] ||
+        !req.signedCookies["sfmc_refresh_token"]
     ) {
 
         res.status(401).send();
         return;
     }
 
-    // const tssd = req.signedCookies["sfmc_tssd"];
-    // const refreshToken = req.signedCookies["sfmc_refresh_token"];
-
-    const tssd = req.cookies["sfmc_tssd"];
-    const refreshToken = req.cookies["sfmc_refresh_token"];
+    const tssd = req.signedCookies["sfmc_tssd"];
+    const refreshToken = req.signedCookies["sfmc_refresh_token"];
 
     try {
         const resp = await sfmcClient.post<AccessTokenResponse>(
@@ -264,19 +232,18 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
         res.cookie(
             "sfmc_access_token",
             accessTokenResp.access_token,
-            { expires: new Date(Date.now() + 900000), httpOnly: true }
+            getCookieOptions(TWENTY_MINS_IN_SECONDS)
         );
         res.cookie(
             "sfmc_tssd",
             tssd,
-            { expires: new Date(Date.now() + 900000), httpOnly: true }
+            getCookieOptions(TWENTY_MINS_IN_SECONDS)
         );
         res.cookie(
             "sfmc_refresh_token",
             accessTokenResp.refresh_token,
-            { expires: new Date(Date.now() + 900000), httpOnly: true }
+            getCookieOptions(ONE_HOUR_IN_SECONDS)
         );
-        console.log("refreshToken", req.cookies);
 
         res.status(200).send();
     } catch (err: any) {
@@ -299,11 +266,11 @@ export const connectToHightouch = async (req: Request, res: Response) => {
 
 
         const payLoad: Connect = {
-            accountId: req.cookies["sfmc_accountId"],
-            userId: req.cookies["sfmc_userId"],
-            email: req.cookies["sfmc_email"],
+            accountId: req.signedCookies["sfmc_accountId"],
+            userId: req.signedCookies["sfmc_userId"],
+            email: req.signedCookies["sfmc_email"],
             resources: {
-                subdomain: req.cookies["sfmc_tssd"],
+                subdomain: req.signedCookies["sfmc_tssd"],
                 clientId: req.body.clientId,
                 clientSecret: req.body.secretKey,
             }
@@ -326,42 +293,6 @@ export const connectToHightouch = async (req: Request, res: Response) => {
 
     }
 }
-
-export const postDestinations = async (req: Request, res: Response) => {
-    axios({
-        method: "get",
-        url: "https://api.hightouch.io/api/v1/destinations",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer eba8870f-973a-42f1-bfcb-9c2dda808be4"
-        }
-    })
-        .then(function (_res: any) {
-            console.log("Response in API", _res);
-            console.log("Response in API", req);
-            console.log("Response in API", res);
-        })
-        .catch(function (error: any) {
-            console.log(error);
-        })
-}
-export const syncs = (_req: Request, _res: Response) => {
-    axios({
-        method: "get",
-        url: "https://api.hightouch.io/api/v1/syncs?orderBy=id",
-        headers: {
-            Accept: "application/json",
-            Authorization: "Bearer eba8870f-973a-42f1-bfcb-9c2dda808be4",
-        },
-    })
-        .then(function (_res: any) {
-            console.log("Response in API", _res);
-        })
-        .catch(function (error: any) {
-            console.log(error);
-        });
-}
-
 export const onError = (req: Request, _res: Response, next: NextFunction) => {
     console.error(
         "Redirected to /oauth2/error while handling:",

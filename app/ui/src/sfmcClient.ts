@@ -43,7 +43,10 @@ client.interceptors.response.use(undefined, (err) => {
 
 //Call this method in App.tsx
 export async function refreshSfmcToken(token: string) {
-    try {
+
+    await client.get('/api/getToken').then(async (res: any) => {
+
+        const token = res.data.csrfToken;
 
         await client({
             method: 'POST',
@@ -52,21 +55,15 @@ export async function refreshSfmcToken(token: string) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-        }).then((resp: any) => {
-                console.log(resp)
-            })
-            .catch((err: any) => {
-                console.log(err)
+        })
+    })
+        .then((resp: any) => {
+            console.log(resp)
+        })
+        .catch((err: any) => {
+            console.log(err)
 
-            }) 
-
-        setTimeout(refreshSfmcToken, settings.tokenRefreshInterval);
-    } catch (err) {
-        console.error(
-            "Error occurred while trying to refresh the token. Won't schedule the auto refresh."
-        );
-        console.error(err);
-    }
+        })
 }
 
 export async function getAssetByCustomerKey(

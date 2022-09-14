@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 
 import express, { Request, Response } from "express";
- 
+
 // Middleware
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -75,21 +75,19 @@ app.use(
         },
     })
 );
- 
-app.use(cookieParser(appConfig.cookieSecret));
-var csrfProtection = csurf({ cookie: true })
 
-// app.use(
-//     csurf({
-//         cookie: {
-//             httpOnly: true,
-//             sameSite: "none",
-//             secure: !isDev(),
-//             signed: true,
-//         },
-//         value: (req) => req.signedCookies["XSRF-Token"],
-//     })
-// );
+app.use(cookieParser(appConfig.cookieSecret));
+var csrfProtection = csurf({
+    cookie: {
+        httpOnly: true,
+        sameSite: "none",
+        secure: !isDev(),
+        signed: true,
+    },
+    value: (req) => req.signedCookies["XSRF-Token"],
+})
+
+ 
 app.use("/assets", express.static(join(__dirname, "dist/ui")));
 
 // Setup the error handling middlewares last.
@@ -106,14 +104,15 @@ app.use(function (_req, res, next) {
     next()
 })
 
- 
+
+routes(app);
+
 app.get('/api/getToken', csrfProtection, function (req, res) {
     // Generate a tocken and send it to the view
     res.send({ csrfToken: req.csrfToken() })
 })
-routes(app);
 
-
+ 
 app.get("/*", (req: Request, res: Response) => {
 
     let token = req.csrfToken();
@@ -139,4 +138,4 @@ if (isDev()) {
 } else {
     app.listen(port, () => console.log(`Listening on port ${port}`));
 }
- 
+

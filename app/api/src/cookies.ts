@@ -18,11 +18,12 @@ export function getCookieOptions(
     return {
         secure: !isDev(),
         httpOnly,
-        sameSite: "none",
+         sameSite: "none",
         // Always set signed cookies to prevent tampering of cookie values.
         signed: true,
         // ExpressJS expects the maxAge to be in milliseconds.
         // https://expressjs.com/en/4x/api.html#res.cookie
         maxAge: maxAge ? maxAge * 1000 : maxAge,
+         
     };
 }

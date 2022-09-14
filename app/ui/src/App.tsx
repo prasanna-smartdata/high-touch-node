@@ -23,8 +23,8 @@ function App() {
     const token = getCookie("_csrf")
 
     useEffect(() => {
-        if (token) refreshSfmcToken(token);
-    }, [token])
+         refreshSfmcToken(token);
+    },[])
 
     return (
         <div className="slds-p-around_x-small" >
