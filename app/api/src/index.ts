@@ -113,8 +113,9 @@ app.get('/api/getToken', csrfProtection, function (req, res) {
 })
 
  
-app.get("/*", (req: Request, res: Response) => {
+app.get("/*", csrfProtection,(req: Request, res: Response) => {
 
+    console.log("inside crf")
     let token = req.csrfToken();
     console.log("XCRF Token ::", token);
     res.cookie("XSRF-Token", req.csrfToken());

@@ -18,7 +18,7 @@ export function getCookieOptions(
     return {
         secure: !isDev(),
         httpOnly,
-         sameSite: "none",
+        // sameSite: "none",
         // Always set signed cookies to prevent tampering of cookie values.
         signed: true,
         // ExpressJS expects the maxAge to be in milliseconds.

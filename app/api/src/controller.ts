@@ -148,6 +148,7 @@ export const verifYServer2ServerOAuth = async (req: Request, res: Response, next
             scope: "email_read email_write email_send",
             client_id: req.body.clientId,
             client_secret: req.body.secretKey,
+            
         }
     ).then((_resp: any) => {
 
