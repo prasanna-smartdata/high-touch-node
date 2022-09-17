@@ -11,7 +11,6 @@ import {
 import express from "express";
 
 export default (app: any) => {
-
     var router = express.Router();
 
     //To test the server is running

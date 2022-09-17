@@ -28,7 +28,6 @@ import routes from "./routes";
 // these imports are also commented out below and only
 // exist to demonstrate how to structure the app.
 
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Make sure we initialize the app config from the env vars
 // as early as possible.
@@ -52,10 +51,7 @@ app.use(morgan(isDev() ? "dev" : "common"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
     bodyParser.json({
-        type: [
-            "application/json",
-
-        ],
+        type: ["application/json"],
     })
 );
 
@@ -67,10 +63,7 @@ app.use(
                     "https://*.exacttarget.com",
                     "https://*.marketingcloudapps.com",
                 ],
-                connectSrc: [
-                    "'self'",
-                    "https://*.marketingcloudapis.com/",
-                ],
+                connectSrc: ["'self'", "https://*.marketingcloudapis.com/"],
             },
         },
     })
@@ -85,9 +78,8 @@ var csrfProtection = csurf({
         signed: true,
     },
     value: (req) => req.signedCookies["XSRF-Token"],
-})
+});
 
- 
 app.use("/assets", express.static(join(__dirname, "dist/ui")));
 
 // Setup the error handling middlewares last.
@@ -95,27 +87,24 @@ app.use(clientErrorHandler);
 app.use(errorHandler);
 
 app.use(function (_req, res, next) {
-    res.header('Content-Type', 'application/json;charset=UTF-8')
-    res.header('Access-Control-Allow-Credentials', "true")
+    res.header("Content-Type", "application/json;charset=UTF-8");
+    res.header("Access-Control-Allow-Credentials", "true");
     res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-    )
-    next()
-})
-
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
 
 routes(app);
 
-app.get('/api/getToken', csrfProtection, function (req, res) {
+app.get("/api/getToken", csrfProtection, function (req, res) {
     // Generate a tocken and send it to the view
-    res.send({ csrfToken: req.csrfToken() })
-})
+    res.send({ csrfToken: req.csrfToken() });
+});
 
- 
-app.get("/*", csrfProtection,(req: Request, res: Response) => {
-
-    console.log("inside crf")
+app.get("/*", csrfProtection, (req: Request, res: Response) => {
+    console.log("inside crf");
     let token = req.csrfToken();
     console.log("XCRF Token ::", token);
     res.cookie("XSRF-Token", req.csrfToken());
@@ -139,4 +128,3 @@ if (isDev()) {
 } else {
     app.listen(port, () => console.log(`Listening on port ${port}`));
 }
-

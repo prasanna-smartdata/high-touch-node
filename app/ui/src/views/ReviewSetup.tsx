@@ -1,4 +1,8 @@
-import { BrandBand, Button, SLDSSpinner } from "@salesforce/design-system-react";
+import {
+    BrandBand,
+    Button,
+    SLDSSpinner,
+} from "@salesforce/design-system-react";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
@@ -31,7 +35,6 @@ function Review(prop: any) {
 
         connectToHightouch(request)
             .then((response: any) => {
-
                 if (response) {
                     setIsValid(true);
                     setShowSuccess(true);

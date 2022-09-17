@@ -1,12 +1,16 @@
-import React, { createContext, useState } from "react"; 
- 
+import React, { createContext, useState } from "react";
+
 export const NavigationContext = createContext({
     isAppDetialsPath: true,
     isSetupPath: false,
     isAppDetialsDone: false,
     isSetupDone: false,
-    updateState: (sApp: boolean,  isSetup: boolean,
-        isAppDetailsDone: boolean,  isSetupDone: boolean) => { }
+    updateState: (
+        sApp: boolean,
+        isSetup: boolean,
+        isAppDetailsDone: boolean,
+        isSetupDone: boolean
+    ) => { },
 });
 
 export const NavigationProvider = ({ children }: any) => {
@@ -15,19 +19,27 @@ export const NavigationProvider = ({ children }: any) => {
     const [isAppDetialsDone, setIsAppDetialsDone] = useState(false);
     const [isSetupDone, setIsSetupDone] = useState(false);
 
-    const updateState = (isApp: boolean, 
-        isSetup: boolean, isAppDetailsDone: boolean,  isSetupDone: boolean) => {
+    const updateState = (
+        isApp: boolean,
+        isSetup: boolean,
+        isAppDetailsDone: boolean,
+        isSetupDone: boolean
+    ) => {
         setIsAppDetialsPath(isApp);
         setIsSetupPath(isSetup);
         setIsAppDetialsDone(isAppDetailsDone);
-        setIsSetupDone(isSetupDone); 
-
-    }
+        setIsSetupDone(isSetupDone);
+    };
     return (
-        <NavigationContext.Provider value={{
-            isAppDetialsPath,  isSetupPath,
-            isAppDetialsDone,  isSetupDone, updateState
-        }}>
+        <NavigationContext.Provider
+            value={{
+                isAppDetialsPath,
+                isSetupPath,
+                isAppDetialsDone,
+                isSetupDone,
+                updateState,
+            }}
+        >
             {children}
         </NavigationContext.Provider>
     );

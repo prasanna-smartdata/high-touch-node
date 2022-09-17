@@ -41,8 +41,6 @@ function AppDetails(prop: any) {
         };
         setShowSpinner(true);
         verifYServer2ServerOAuth(request).then((response: any) => {
-
-
             if (response === "valid") {
                 getUserInfo().then((response: any) => {
                     if (response) {

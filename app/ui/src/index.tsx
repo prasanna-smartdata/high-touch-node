@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReactDOM from "react-dom/client";
-import { Icon, IconSettings, PageHeader } from "@salesforce/design-system-react"
+import {
+    Icon,
+    IconSettings,
+    PageHeader,
+} from "@salesforce/design-system-react";
 
 import actionSprite from "@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg";
 import customSprite from "@salesforce-ux/design-system/assets/icons/custom-sprite/svg/symbols.svg";
@@ -23,18 +27,17 @@ window.addEventListener("unhandledrejection", (err) =>
     console.error("CAUGHT unhandledrejection!", err)
 );
 root.render(
-    <IconSettings iconPath="/assets/icons"
+    <IconSettings
+        iconPath="/assets/icons"
         actionSprite={actionSprite}
         customSprite={customSprite}
         doctypeSprite={doctypeSprite}
         standardSprite={standardSprite}
         utilitySprite={utilitySprite}
     >
-
         <React.StrictMode>
             <BrowserRouter>
                 <CookiesProvider>
-
                     <Routes>
                         <Route path="*" element={<App />}></Route>
                     </Routes>

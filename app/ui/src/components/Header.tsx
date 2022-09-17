@@ -4,42 +4,43 @@ import { useLocation } from "react-router-dom";
 import { withNavigation } from "./withNavigation";
 
 const Header = (prop: any) => {
-    console.log(prop)
+    console.log(prop);
     const location = useLocation();
     console.log(location.pathname);
 
-    const { isAppDetialsPath,  isSetupPath, isAppDetialsDone,  isSetupDone } = prop;
+    const { isAppDetialsPath, isSetupPath, isAppDetialsDone, isSetupDone } =
+        prop;
 
     useEffect(() => {
         switch (location.pathname) {
             case "/":
             case "/CheckApplicationDetails":
-                prop.updateState(true, false, false,false);
+                prop.updateState(true, false, false, false);
                 break;
             // case "/ConfigHightouch":
             //     prop.updateState(false, true, false,true,false,false);
             //     break;
             case "/ReviewSetup":
-                prop.updateState(false, true, true,false);
+                prop.updateState(false, true, true, false);
                 break;
             default:
                 break;
         }
-    }, [])
-
+    }, []);
 
     const navigationAppDetailsClass = classNames({
-        'slds-path__item': true,
-        'btn-slds-is-current slds-is-active': !isAppDetialsDone && isAppDetialsPath,
-        'slds-is-incomplete': !isAppDetialsPath,
-        'slds-is-complete': isAppDetialsDone,
+        "slds-path__item": true,
+        "btn-slds-is-current slds-is-active":
+            !isAppDetialsDone && isAppDetialsPath,
+        "slds-is-incomplete": !isAppDetialsPath,
+        "slds-is-complete": isAppDetialsDone,
     });
-    
+
     const navigationSetupClass = classNames({
-        'slds-path__item': true,
-        'btn-slds-is-current slds-is-active': !isSetupDone && isSetupPath,
-        'slds-is-incomplete': !isSetupPath,
-        'slds-is-complete': isSetupDone,
+        "slds-path__item": true,
+        "btn-slds-is-current slds-is-active": !isSetupDone && isSetupPath,
+        "slds-is-incomplete": !isSetupPath,
+        "slds-is-complete": isSetupDone,
     });
 
     return (
@@ -48,40 +49,69 @@ const Header = (prop: any) => {
                 <div className="slds-grid slds-path__scroller-container">
                     <div className="slds-path__scroller">
                         <div className="slds-path__scroller_inner">
-                            <ul className="slds-path__nav" role="listbox" aria-orientation="horizontal">
-
-                                <li className={navigationAppDetailsClass} role="presentation">
-                                    <a aria-selected="true" className="slds-path__link" id="path-1" role="option"  >
+                            <ul
+                                className="slds-path__nav"
+                                role="listbox"
+                                aria-orientation="horizontal"
+                            >
+                                <li
+                                    className={navigationAppDetailsClass}
+                                    role="presentation"
+                                >
+                                    <a
+                                        aria-selected="true"
+                                        className="slds-path__link"
+                                        id="path-1"
+                                        role="option"
+                                    >
                                         <span className="slds-path__stage">
-                                            <svg className="slds-icon slds-icon_x-small" aria-hidden="true">
+                                            <svg
+                                                className="slds-icon slds-icon_x-small"
+                                                aria-hidden="true"
+                                            >
                                                 <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
                                             </svg>
-                                            <span className="slds-assistive-text">Current Stage:</span>
+                                            <span className="slds-assistive-text">
+                                                Current Stage:
+                                            </span>
                                         </span>
-                                        <span className="slds-path__title">S2S Application Setup</span>
+                                        <span className="slds-path__title">
+                                            S2S Application Setup
+                                        </span>
                                     </a>
                                 </li>
-                               
-                                <li className={navigationSetupClass} role="presentation">
-                                    <a aria-selected="false" className="slds-path__link" id="path-3" role="option"  >
+
+                                <li
+                                    className={navigationSetupClass}
+                                    role="presentation"
+                                >
+                                    <a
+                                        aria-selected="false"
+                                        className="slds-path__link"
+                                        id="path-3"
+                                        role="option"
+                                    >
                                         <span className="slds-path__stage">
-                                            <svg className="slds-icon slds-icon_x-small" aria-hidden="true">
+                                            <svg
+                                                className="slds-icon slds-icon_x-small"
+                                                aria-hidden="true"
+                                            >
                                                 <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
                                             </svg>
                                         </span>
-                                        <span className="slds-path__title">Review Setup</span>
+                                        <span className="slds-path__title">
+                                            Review Setup
+                                        </span>
                                     </a>
                                 </li>
-
-
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 //export default Header;
 
 export default withNavigation(Header);
