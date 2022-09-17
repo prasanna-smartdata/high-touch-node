@@ -23,14 +23,14 @@ window.addEventListener("unhandledrejection", (err) =>
     console.error("CAUGHT unhandledrejection!", err)
 );
 root.render(
-    <IconSettings iconPath="@salesforce-ux/design-system/assets/assets/icons"
+    <IconSettings iconPath="/assets/icons"
         actionSprite={actionSprite}
         customSprite={customSprite}
         doctypeSprite={doctypeSprite}
         standardSprite={standardSprite}
         utilitySprite={utilitySprite}
     >
-        
+
         <React.StrictMode>
             <BrowserRouter>
                 <CookiesProvider>
