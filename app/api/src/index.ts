@@ -12,21 +12,9 @@ import helmet from "helmet";
 import csurf from "csurf";
 import ejs from "ejs";
 import morgan from "morgan";
-
-//import { AccessTokenResponse } from "sfmc";
-
 import { getAppConfig, getAppPort, isDev } from "./config";
-// import {
-//     getCookieOptions, TWENTY_MINS_IN_SECONDS,
-//     //ONE_HOUR_IN_SECONDS,
-//     // TWENTY_MINS_IN_SECONDS,
-// } from "./cookies";
 import { clientErrorHandler, errorHandler } from "./errors";
 import routes from "./routes";
-
-// These are commented out because the code that uses
-// these imports are also commented out below and only
-// exist to demonstrate how to structure the app.
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Make sure we initialize the app config from the env vars
@@ -97,11 +85,6 @@ app.use(function (_req, res, next) {
 });
 
 routes(app);
-
-app.get("/api/getToken", csrfProtection, function (req, res) {
-    // Generate a tocken and send it to the view
-    res.send({ csrfToken: req.csrfToken() });
-});
 
 app.get("/*", csrfProtection, (req: Request, res: Response) => {
     console.log("inside crf");
